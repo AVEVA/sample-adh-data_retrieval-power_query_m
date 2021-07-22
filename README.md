@@ -25,31 +25,31 @@ Replace the placeholders in the `appsettings.json` file with your Tenant Id, Cli
 ### Using Power BI
 
 1. Open Power BI Desktop
-1. Click the *Get data* button in the Data section of the ribbon
-1. In the *Get Data* window search for "Blank Query"
-1. Select *Blank Query* and click the *Connect* button
-1. Click the *Advanced Editor* button in the Query section of the ribbon in the *Power Query Editor*
+1. Click the **Get data** button in the Data section of the ribbon
+1. In the **Get Data** window search for "Blank Query"
+1. Select **Blank Query** and click the **Connect** button
+1. Click the **Advanced Editor** button in the Query section of the ribbon in the **Power Query Editor**
 1. Paste the query from the desired .pq file
-1. Click the *Done* button
-1. If the .pq file defines a function, fill out the parameters and click the *Invoke* button
-1. If GetDataView.pq is being used, the table that is generated will need to be expanded by clicking the expand column button on the *Column1* header
-1. Selecting the data type of each column may also be necessary. To do this automatically for all columns, select the *Transform* section of the ribbon, highlight all columns of your table, and click the *Detect Data Type* button in the ribbon under *Any Column*
-1. Click *Close & Apply* in the *Home* section of the ribbon
+1. Click the **Done** button
+1. If the .pq file defines a function, fill out the parameters and click the **Invoke** button
+1. If GetDataView.pq is being used, the table that is generated will need to be expanded by clicking the expand column button on the **Column1** header
+1. Selecting the data type of each column may also be necessary. To do this automatically for all columns, select the **Transform** section of the ribbon, highlight all columns of your table, and click the **Detect Data Type** button in the ribbon under **Any Column**
+1. Click **Close & Apply** in the **Home** section of the ribbon
 
 Note: If you are using the Power BI service you will be unable to access the referenced appsettings.json file. Therefore, it will be necessary to modify the provided power query scripts to read the app settings from another source (e.g. [Azure Key Vault](https://docs.microsoft.com/en-us/azure/key-vault/)). It is not recommended to hard code the app settings directly in the power query scripts as this could pose a security risk.
 
 ### Using Excel
 
 1. Open Excel
-1. Under the *Data* section of the ribbon, click the *Get Data* button
-1. In the dropdown drill down to *From Other Sources* and click *Blank Query*
-1. Click the *Advanced Editor* button in the Query section of the ribbon in the *Power Query Editor*
+1. Under the **Data** section of the ribbon, click the **Get Data** button
+1. In the dropdown drill down to **From Other Sources** and click **Blank Query**
+1. Click the **Advanced Editor** button in the Query section of the ribbon in the *Power Query Editor*
 1. Paste the query from the desired .pq file
-1. Click the *Done* button
-1. If the .pq file defines a function, fill out the parameters and click the *Invoke* button
-1. If GetDataView.pq is being used, the table that is generated will need to be expanded by clicking the expand column button on the *Column1* header
-1. Selecting the data type of each column may also be necessary. To do this automatically for all columns, select the *Transform* section of the ribbon, highlight all columns of your table, and click the *Detect Data Type* button in the ribbon under *Any Column*
-1. Click *Close & Apply* in the *Home* section of the ribbon
+1. Click the **Done** button
+1. If the .pq file defines a function, fill out the parameters and click the **Invoke** button
+1. If GetDataView.pq is being used, the table that is generated will need to be expanded by clicking the expand column button on the **Column1** header
+1. Selecting the data type of each column may also be necessary. To do this automatically for all columns, select the **Transform** section of the ribbon, highlight all columns of your table, and click the **Detect Data Type** button in the ribbon under **Any Column**
+1. Click **Close & Apply** in the **Home** section of the ribbon
 
 ## Testing the sample
 
@@ -60,13 +60,13 @@ Note: If you are using the Power BI service you will be unable to access the ref
 - To allow syntax highlighting and intellisense for .pq file in Visual Studio, the [Power Query SDK extension](https://marketplace.visualstudio.com/items?itemName=Dakahn.PowerQuerySDK) will need to be installed.
 - Replace the placeholders in the `appsettings.json` as mentioned above.
 - Disable M Intellisese in the advanced editor
-  1. Open the *Power Query Editor*
-  1. Click *File*
-  1. Click *Options and settings*
-  1. Click *Options*
-  1. Select *Power Query Editor*
-  1. Uncheck *Enable M Intellisese...*
-  1. Click *Ok*
+  1. Open the **Power Query Editor**
+  1. Click **File**
+  1. Click **Options and settings**
+  1. Click **Options**
+  1. Select **Power Query Editor**
+  1. Uncheck **Enable M Intellisese...**
+  1. Click **Ok**
 
 ### Running the sample
 

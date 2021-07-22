@@ -1,4 +1,4 @@
-using FlaUI.Core.AutomationElements;
+﻿using FlaUI.Core.AutomationElements;
 using FlaUI.Core.Definitions;
 using FlaUI.Core.Tools;
 using FlaUI.UIA3;
@@ -42,7 +42,7 @@ namespace OCSPowerQueryTest
                 }
 
                 // Replace placeholder with configuration path
-                pqScript = pqScript.Replace("PATH_TO_CONFIG", $"{Directory.GetCurrentDirectory()}/config.json");
+                pqScript = pqScript.Replace("PATH_TO_CONFIG", $"{Directory.GetCurrentDirectory()}/appsettings.json");
             }
             catch (IOException e)
             {

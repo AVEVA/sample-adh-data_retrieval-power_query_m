@@ -1,10 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net5.0-windows7.0</TargetFramework>
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Remove="C:\Projects\samples\sample-ocs-data_retrieval-power_query_m\stylecop.json" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Remove="config.json" />
@@ -12,9 +16,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\..\OCSPowerQuery\OCSPowerQuery\config.json" Link="config.json">
+    <Content Include="..\..\OCSPowerQuery\OCSPowerQuery\appsettings.json" Link="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\..\OCSPowerQuery\OCSPowerQuery\appsettings.placeholder.json" Link="appsettings.placeholder.json" />
   </ItemGroup>
 
   <ItemGroup>

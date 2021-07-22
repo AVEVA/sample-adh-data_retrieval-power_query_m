@@ -28,7 +28,7 @@ namespace OCSPowerQueryTest
         /// </summary>
         /// <param powerQueryFile>The power query file to test</param>
         /// <returns>true if successful</returns>
-        private bool testPowerQueryFunction(string powerQueryFile)
+        private static bool testPowerQueryFunction(string powerQueryFile)
         {
             bool success;
 
@@ -118,7 +118,7 @@ namespace OCSPowerQueryTest
         /// </summary>
         /// <param getter>The getter function to retry until the timeout window is surpassed</param>
         /// <returns>The final result returned by RetryResult</returns>
-        private T WaitForElement<T>(Func<T> getter)
+        private static T WaitForElement<T>(Func<T> getter)
         {
             RetryResult<T> retry;
             var count = 0;

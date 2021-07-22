@@ -37,6 +37,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="appsettings.placeholder.json">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="GetDataView.pq">
       <SubType>Content</SubType>
     </Content>
@@ -48,7 +51,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="config.json">
+    <Content Include="appsettings.json">
       <SubType>Content</SubType>
     </Content>
   </ItemGroup>

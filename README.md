@@ -70,10 +70,10 @@ Note: If you are using the Power BI service you will be unable to access the ref
 
 ### Running the sample
 
-- Load the .csproj from the OCSPowerQueryTest directory above this in Visual Studio
-- Rebuild project
-- Open Test Explorer and make sure there are tests showing
-- Run the test
+1. Load the .csproj from the OCSPowerQueryTest directory above this in Visual Studio
+1. Rebuild project
+1. Open Test Explorer and make sure there are tests showing
+1. Run the test
 
 Note: Do not touch your mouse or keyboard as the the tests are running since this could interfere with the automated process.
 

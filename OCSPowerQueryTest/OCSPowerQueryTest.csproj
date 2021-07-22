@@ -16,20 +16,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\..\OCSPowerQuery\OCSPowerQuery\appsettings.json" Link="appsettings.json">
+    <Content Include="..\OCSPowerQuery\appsettings.json" Link="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\OCSPowerQuery\OCSPowerQuery\appsettings.placeholder.json" Link="appsettings.placeholder.json" />
+    <Content Include="..\OCSPowerQuery\appsettings.placeholder.json" Link="appsettings.placeholder.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\OCSPowerQuery\OCSPowerQuery\GetAsset.pq" Link="GetAsset.pq">
+    <None Include="..\OCSPowerQuery\GetAsset.pq" Link="GetAsset.pq">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\..\OCSPowerQuery\OCSPowerQuery\GetDataView.pq" Link="GetDataView.pq">
+    <None Include="..\OCSPowerQuery\GetDataView.pq" Link="GetDataView.pq">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\..\OCSPowerQuery\OCSPowerQuery\GetToken.pq" Link="GetToken.pq">
+    <None Include="..\OCSPowerQuery\GetToken.pq" Link="GetToken.pq">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

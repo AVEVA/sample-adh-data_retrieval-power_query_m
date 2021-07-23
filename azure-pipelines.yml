@@ -68,4 +68,9 @@ jobs:
       demands: COMPUTERNAME -equals $(buildAgent)
 
     steps:
+    - task: DotNetCoreCLI@2
+        displayName: 'Build'
+        inputs:
+          command: build
+
     - template: '/miscellaneous/build_templates/analysis.yml@templates'

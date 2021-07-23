@@ -134,7 +134,7 @@ namespace OCSPowerQueryTest
             {
                 retry = Retry.WhileNull<T>(
                     () => getter(),
-                    TimeSpan.FromSeconds(5*count));
+                    TimeSpan.FromSeconds(5*count), null, false, true);
 
                 count++;
             } while (!retry.Success && count < 4);

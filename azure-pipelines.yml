@@ -68,9 +68,11 @@ jobs:
       demands: COMPUTERNAME -equals $(buildAgent)
 
     steps:
-    - task: DotNetCoreCLI@2
+      - task: DotNetCoreCLI@2
         displayName: 'Build'
         inputs:
           command: build
 
-    - template: '/miscellaneous/build_templates/analysis.yml@templates'
+      - template: '/miscellaneous/build_templates/binskim.yml@templates'
+
+      - template: '/miscellaneous/build_templates/analysis.yml@templates'

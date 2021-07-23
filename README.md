@@ -4,7 +4,7 @@
 
 [![Build Status](https://dev.azure.com/osieng/engineering/_apis/build/status/product-readiness/OCS/osisoft.sample-ocs-data_retrieval-power_query_m?repoName=osisoft%2Fsample-ocs-data_retrieval-power_query_m&branchName=main)](https://dev.azure.com/osieng/engineering/_build/latest?definitionId=3963&repoName=osisoft%2Fsample-ocs-data_retrieval-power_query_m&branchName=main)
 
-Built with .NET Framework 5.0
+Built with .NET Framework 5.
 
 
 The sample code in this repository demonstrates how to connect to OCS and pull data from either Data Views or Assets using Power Query M. Power Query works with a variety of Microsoft products such as Analysis Services, Excel, and Power BI workbooks. For more information on Power Query M please refer to [Microsoft's documentation](https://docs.microsoft.com/en-us/powerquery-m/).

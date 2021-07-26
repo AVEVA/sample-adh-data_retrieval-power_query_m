@@ -61,6 +61,13 @@ jobs:
           publishTestResults: true
           testRunTitle: '$(Agent.JobName) on $(imageName)'
           workingDirectory: $(Build.SourcesDirectory)\OCSPowerQueryTest
+    
+      - script: |
+          taskkill /F /IM PBIDesktop.exe
+          taskkill /F /IM WinAppDriver.exe
+        continueOnError: true
+        displayName: 'Stop test processes'
+        condition: succeededOrFailed()
 
   - job: Analysis
     pool:

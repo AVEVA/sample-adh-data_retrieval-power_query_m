@@ -62,14 +62,6 @@ jobs:
           testRunTitle: '$(Agent.JobName) on $(imageName)'
           workingDirectory: $(Build.SourcesDirectory)\OCSPowerQueryTest
           timeoutInMinutes: 3
-    
-      - script: |
-          taskkill /F /IM PBIDesktop.exe
-          taskkill /F /IM WinAppDriver.exe
-        continueOnError: true
-        failOnStderr: false
-        displayName: 'Stop test processes'
-        condition: succeededOrFailed()
 
   - job: Analysis
     pool:

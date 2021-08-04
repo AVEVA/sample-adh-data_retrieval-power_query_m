@@ -66,7 +66,7 @@
         interval = if interval = null then Duration.FromText(ReadFromConfiguration("interval")) else interval,
 
         // construct Data View data window query
-        dataQuery = "/../api/"
+        dataQuery = "/api/"
             &apiVersion&
             "/Tenants/"
             &tenantId&

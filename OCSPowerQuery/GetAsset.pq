@@ -66,7 +66,7 @@
         interval = Duration.FromText(ReadFromConfiguration("interval")),
 
         // construct Data View data window query
-        dataQuery = "/../api/"
+        dataQuery = "/api/"
             &apiVersion&
             "/Tenants/"
             &tenantId&

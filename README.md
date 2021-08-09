@@ -13,7 +13,7 @@ The sample code in this repository demonstrates how to connect to OCS and pull d
 
 The sample is configured using the file [appsettings.placeholder.json](ClientCredentialFlow/appsettings.placeholder.json). Before editing, rename this file to `appsettings.json`. This repository's `.gitignore` rules should prevent the file from ever being checked in to any fork or branch, to ensure credentials are not compromised.
 
-Replace the placeholders in the `appsettings.json` file with your Tenant Id, Client Id and Client Secret, Namespace Id, and the current Api Version. Optionally, a default Asset, Data View, start index, end index, and interval can be configured for queries.
+Replace the placeholders in the `appsettings.json` file with your Tenant Id, Client Id and Client Secret, Namespace Id, and the current Api Version. Optionally, a default Asset, Asset Query, Data View, start index, end index, and interval can be configured for queries.
 
 ## Running the sample
 

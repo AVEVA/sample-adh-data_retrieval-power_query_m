@@ -61,6 +61,7 @@ jobs:
           publishTestResults: true
           testRunTitle: '$(Agent.JobName) on $(imageName)'
           workingDirectory: $(Build.SourcesDirectory)\OCSPowerQueryTest
+          timeoutInMinutes: 3
 
   - job: Analysis
     pool:

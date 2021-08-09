@@ -108,7 +108,7 @@ namespace OCSPowerQueryTest
                         var dataGrid = WaitForElement(() => queryEditor.FindFirstDescendant(cf => cf.ByControlType(ControlType.DataGrid)));
                         success = dataGrid != null;
                     }
-                    catch (IOException e)
+                    catch (Exception e)
                     {
                         Console.WriteLine("An error occurred while testing the provided power query script:");
                         Console.WriteLine(e.Message);

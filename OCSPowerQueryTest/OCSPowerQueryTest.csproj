@@ -26,6 +26,9 @@
     <None Include="..\OCSPowerQuery\GetAsset.pq" Link="GetAsset.pq">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="..\OCSPowerQuery\GetAssets.pq" Link="GetAssets.pq">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\OCSPowerQuery\GetDataView.pq" Link="GetDataView.pq">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

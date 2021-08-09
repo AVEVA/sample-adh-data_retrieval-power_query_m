@@ -23,6 +23,12 @@ namespace OCSPowerQueryTest
             Assert.True(testPowerQueryFunction("GetAsset.pq"));
         }
 
+        [Fact]
+        public void GetAssetsTest()
+        {
+            Assert.True(testPowerQueryFunction("GetAssets.pq"));
+        }
+
         /// <summary>
         /// This function opens Power BI Desktop and executes the provided power query file
         /// </summary>

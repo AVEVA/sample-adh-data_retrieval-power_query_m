@@ -37,7 +37,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include=".editorconfig">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="appsettings.placeholder.json">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="GetAssetIds.pq">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="GetAssets.pq">
       <SubType>Content</SubType>
     </Content>
     <Content Include="GetDataView.pq">

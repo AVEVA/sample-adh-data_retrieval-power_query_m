@@ -1,4 +1,4 @@
-﻿(assetId as nullable text, startIndex as nullable datetime, endIndex as nullable datetime, interval as nullable duration) as table =>
+﻿(query as nullable text) as table =>
     let
         // helper function for reading from a configuration file
         ReadFromConfiguration = (configurationParameter as text) =>
@@ -60,26 +60,20 @@
         apiVersion = ReadFromConfiguration("apiVersion"),
 
         // set default parameters from configuration
-        assetId = if assetId = null then ReadFromConfiguration("assetId") else assetId,
-        startIndex = if startIndex = null then DateTime.FromText(ReadFromConfiguration("startIndex")) else startIndex,
-        endIndex = if endIndex = null then DateTime.FromText(ReadFromConfiguration("endIndex")) else endIndex,
-        interval = if interval = null then Duration.FromText(ReadFromConfiguration("interval")) else interval,
+        query = if query = null then ReadFromConfiguration("assetQuery") else query,
 
-        // construct Data View data window query
-        dataQuery = "/api/"
+        // PI Cloud REST API query - window
+        dataQuery = "/../api/"
             &apiVersion&
             "/Tenants/"
             &tenantId&
             "/Namespaces/"
             &namespaceId&
-            "/Assets/"
-            &assetId&
-            "/Data?startIndex="
-            &DateTime.ToText(startIndex, "yyyy-MM-ddThh:mm:ssZ")&
-            "&endIndex="
-            &DateTime.ToText(endIndex, "yyyy-MM-ddThh:mm:ssZ"),
+            "/Assets/?query="     
+            &query,
 
-        getJsonQuery = Json.Document(
+        // Query PI Cloud REST API
+        GetJsonQuery = Json.Document(
             Web.Contents(
                 resourceUri,
                 [RelativePath=dataQuery, 
@@ -87,9 +81,7 @@
                 ]
             )
         ),
-    Results = getJsonQuery[Results],
-    tableOfData = Record.ToTable(Results),
-    expandedTableofData1 = Table.ExpandListColumn(tableOfData, "Value"),
-    expandedTableofData2 = Table.ExpandRecordColumn(expandedTableofData1, "Value", {"Timestamp", "Value"}, {"Value.Timestamp", "Value.Value"})
+        tableOfIds = Table.FromList(GetJsonQuery, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+        expandedTableOfIds = Table.ExpandRecordColumn(tableOfIds, "Column1", {"Id"}, {"Column1.Id"})
 in
-    expandedTableofData2
+        expandedTableOfIds

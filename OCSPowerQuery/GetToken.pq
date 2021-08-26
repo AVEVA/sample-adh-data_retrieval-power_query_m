@@ -15,8 +15,7 @@
     clientSecret = ReadFromConfiguration("ClientSecret"),
     resourceUri = ReadFromConfiguration("ResourceUri"),
     // split URL to avoid Power BI Service error regarding unsupported function Web.Contents
-    authUrlPart1 = resourceUri & "/identity",
-    authUrlPart2 = "/connect/token",
+    authUrl = "/identity/connect/token",
     // Construct message for authentication
     escapedClientSecret = Uri.EscapeDataString(clientSecret),
     authPOSTBody =
@@ -30,10 +29,9 @@
     GetJson =
         try
             Web.Contents(
-                authUrlPart1,
+                resourceUri,
                 [
-                    RelativePath = authUrlPart2,
-                    Timeout = #duration(0, 0, 30, 0),
+                    RelativePath = authUrl,
                     Headers = [
                         #"Content-Type" = "application/x-www-form-urlencoded;charset=UTF-8",
                         Accept = "application/json"

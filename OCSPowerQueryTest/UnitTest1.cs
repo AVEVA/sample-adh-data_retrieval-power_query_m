@@ -66,7 +66,7 @@ namespace OCSPowerQueryTest
                     try
                     {
                         // Close the start window
-                        var startDialog = WaitForElement(() => window.FindFirstChild(cf => cf.ByAutomationId("startDialogDialog")));
+                        var startDialog = WaitForElement(() => window.FindFirstChild(cf => cf.ByAutomationId("KoStartDialog")));
                         var getDataButton = WaitForElement(() => startDialog.FindFirstDescendant(cf => cf.ByName("Get data"))?.AsButton());
                         getDataButton?.Invoke();
 

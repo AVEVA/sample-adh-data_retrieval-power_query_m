@@ -15,9 +15,9 @@
         GetToken = () =>
         let
             // read configuration parameters
-            clientId = ReadFromConfiguration("clientId"),
-            clientSecret = ReadFromConfiguration("clientSecret"),
-            resourceUri = ReadFromConfiguration("resourceUri"),
+            clientId = ReadFromConfiguration("ClientId"),
+            clientSecret = ReadFromConfiguration("ClientSecret"),
+            resourceUri = ReadFromConfiguration("ResourceUri"),
             // split URL to avoid Power BI Service error regarding unsupported function Web.Contents
             authUrlPart1 = resourceUri & "/identity",
             authUrlPart2 = "/connect/token",
@@ -30,7 +30,7 @@
                 & escapedClientSecret
                 & "&grant_type=client_credentials",
             authPOSTBodyBinary = Text.ToBinary(authPOSTBody),
-            // Authentiate
+            // Authenticate
             GetJson =
                 try
                     Web.Contents(
@@ -57,16 +57,16 @@
         GetAssetIds = (query as nullable text) as table =>
         let 
             // read configuration parameters
-            resourceUri = ReadFromConfiguration("resourceUri"),
-            tenantId = ReadFromConfiguration("tenantId"),
-            namespaceId = ReadFromConfiguration("namespaceId"),
-            apiVersion = ReadFromConfiguration("apiVersion"),
+            resourceUri = ReadFromConfiguration("ResourceUri"),
+            tenantId = ReadFromConfiguration("TenantId"),
+            namespaceId = ReadFromConfiguration("NamespaceId"),
+            apiVersion = ReadFromConfiguration("ApiVersion"),
 
             // set default parameters from configuration
-            query = if query = null then ReadFromConfiguration("assetQuery") else query,
+            query = if query = null then ReadFromConfiguration("AssetQuery") else query,
 
             // PI Cloud REST API query - window
-            dataQuery = "/../api/"
+            dataQuery = "/api/"
                 &apiVersion&
                 "/Tenants/"
                 &tenantId&
@@ -93,16 +93,16 @@
         GetAsset = (assetId as nullable text, startIndex as nullable datetime, endIndex as nullable datetime, interval as nullable duration) as table =>
         let
             // read configuration parameters
-            resourceUri = ReadFromConfiguration("resourceUri"),
-            tenantId = ReadFromConfiguration("tenantId"),
-            namespaceId = ReadFromConfiguration("namespaceId"),
-            apiVersion = ReadFromConfiguration("apiVersion"),
+            resourceUri = ReadFromConfiguration("ResourceUri"),
+            tenantId = ReadFromConfiguration("TenantId"),
+            namespaceId = ReadFromConfiguration("NamespaceId"),
+            apiVersion = ReadFromConfiguration("ApiVersion"),
 
             // set default parameters from configuration
-            assetId = if assetId = null then ReadFromConfiguration("assetId") else assetId,
-            startIndex = if startIndex = null then DateTime.FromText(ReadFromConfiguration("startIndex")) else startIndex,
-            endIndex = if endIndex = null then DateTime.FromText(ReadFromConfiguration("endIndex")) else endIndex,
-            interval = if interval = null then Duration.FromText(ReadFromConfiguration("interval")) else interval,
+            assetId = if assetId = null then ReadFromConfiguration("AssetId") else assetId,
+            startIndex = if startIndex = null then DateTime.FromText(ReadFromConfiguration("StartIndex")) else startIndex,
+            endIndex = if endIndex = null then DateTime.FromText(ReadFromConfiguration("EndIndex")) else endIndex,
+            interval = if interval = null then Duration.FromText(ReadFromConfiguration("Interval")) else interval,
 
             // construct Data View data window query
             dataQuery = "/api/"
@@ -114,9 +114,9 @@
                 "/Assets/"
                 &assetId&
                 "/Data?startIndex="
-                &DateTime.ToText(startIndex, "yyyy-MM-ddThh:mm:ssZ")&
+                &DateTime.ToText(startIndex, "o")&
                 "&endIndex="
-                &DateTime.ToText(endIndex, "yyyy-MM-ddThh:mm:ssZ"),
+                &DateTime.ToText(endIndex, "o"),
 
             getJsonQuery = Json.Document(
                 Web.Contents(

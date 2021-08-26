@@ -30,6 +30,7 @@ Replace the placeholders in the `appsettings.json` file with your Tenant Id, Cli
 1. Select **Blank Query** and click the **Connect** button
 1. Click the **Advanced Editor** button in the Query section of the ribbon in the **Power Query Editor**
 1. Paste the query from the desired .pq file
+1. Replace the "PATH_TO_CONFIG" placeholder with the path to your 'appsettings.json' file
 1. Click the **Done** button
 1. If the .pq file defines a function, fill out the parameters and click the **Invoke** button
 1. If GetDataView.pq is being used, the table that is generated will need to be expanded by clicking the expand column button on the **Column1** header
@@ -45,6 +46,7 @@ Note: If you are using the Power BI service you will be unable to access the ref
 1. In the dropdown drill down to **From Other Sources** and click **Blank Query**
 1. Click the **Advanced Editor** button in the Query section of the ribbon in the *Power Query Editor*
 1. Paste the query from the desired .pq file
+1. Replace the "PATH_TO_CONFIG" placeholder with the path to your 'appsettings.json' file
 1. Click the **Done** button
 1. If the .pq file defines a function, fill out the parameters and click the **Invoke** button
 1. If GetDataView.pq is being used, the table that is generated will need to be expanded by clicking the expand column button on the **Column1** header

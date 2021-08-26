@@ -15,9 +15,9 @@
         GetToken = () =>
         let
             // read configuration parameters
-            clientId = ReadFromConfiguration("clientId"),
-            clientSecret = ReadFromConfiguration("clientSecret"),
-            resourceUri = ReadFromConfiguration("resourceUri"),
+            clientId = ReadFromConfiguration("ClientId"),
+            clientSecret = ReadFromConfiguration("ClientSecret"),
+            resourceUri = ReadFromConfiguration("ResourceUri"),
             // split URL to avoid Power BI Service error regarding unsupported function Web.Contents
             authUrlPart1 = resourceUri & "/identity",
             authUrlPart2 = "/connect/token",
@@ -30,7 +30,7 @@
                 & escapedClientSecret
                 & "&grant_type=client_credentials",
             authPOSTBodyBinary = Text.ToBinary(authPOSTBody),
-            // Authentiate
+            // Authenticate
             GetJson =
                 try
                     Web.Contents(
@@ -54,16 +54,16 @@
             AccessTokenHeader,
 
         // read configuration parameters
-        resourceUri = ReadFromConfiguration("resourceUri"),
-        tenantId = ReadFromConfiguration("tenantId"),
-        namespaceId = ReadFromConfiguration("namespaceId"),
-        apiVersion = ReadFromConfiguration("apiVersion"),
+        resourceUri = ReadFromConfiguration("ResourceUri"),
+        tenantId = ReadFromConfiguration("TenantId"),
+        namespaceId = ReadFromConfiguration("NamespaceId"),
+        apiVersion = ReadFromConfiguration("ApiVersion"),
 
         // set default parameters from configuration
-        query = if query = null then ReadFromConfiguration("assetQuery") else query,
+        query = if query = null then ReadFromConfiguration("AssetQuery") else query,
 
         // PI Cloud REST API query - window
-        dataQuery = "/../api/"
+        dataQuery = "/api/"
             &apiVersion&
             "/Tenants/"
             &tenantId&

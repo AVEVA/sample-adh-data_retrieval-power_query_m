@@ -15,9 +15,9 @@
         GetToken = () =>
         let
             // read configuration parameters
-            clientId = ReadFromConfiguration("clientId"),
-            clientSecret = ReadFromConfiguration("clientSecret"),
-            resourceUri = ReadFromConfiguration("resourceUri"),
+            clientId = ReadFromConfiguration("ClientId"),
+            clientSecret = ReadFromConfiguration("ClientSecret"),
+            resourceUri = ReadFromConfiguration("ResourceUri"),
             // split URL to avoid Power BI Service error regarding unsupported function Web.Contents
             authUrlPart1 = resourceUri & "/identity",
             authUrlPart2 = "/connect/token",
@@ -30,7 +30,7 @@
                 & escapedClientSecret
                 & "&grant_type=client_credentials",
             authPOSTBodyBinary = Text.ToBinary(authPOSTBody),
-            // Authentiate
+            // Authenticate
             GetJson =
                 try
                     Web.Contents(
@@ -54,16 +54,16 @@
             AccessTokenHeader,
 
         // read configuration parameters
-        resourceUri = ReadFromConfiguration("resourceUri"),
-        tenantId = ReadFromConfiguration("tenantId"),
-        namespaceId = ReadFromConfiguration("namespaceId"),
-        apiVersion = ReadFromConfiguration("apiVersion"),
+        resourceUri = ReadFromConfiguration("ResourceUri"),
+        tenantId = ReadFromConfiguration("TenantId"),
+        namespaceId = ReadFromConfiguration("NamespaceId"),
+        apiVersion = ReadFromConfiguration("ApiVersion"),
 
         // set default parameters from configuration
-        dataViewId = if dataViewId = null then ReadFromConfiguration("dataViewId") else dataViewId,
-        startIndex = if startIndex = null then DateTime.FromText(ReadFromConfiguration("startIndex")) else startIndex,
-        endIndex = if endIndex = null then DateTime.FromText(ReadFromConfiguration("endIndex")) else endIndex,
-        interval = if interval = null then Duration.FromText(ReadFromConfiguration("interval")) else interval,
+        dataViewId = if dataViewId = null then ReadFromConfiguration("DataViewId") else dataViewId,
+        startIndex = if startIndex = null then DateTime.FromText(ReadFromConfiguration("StartIndex")) else startIndex,
+        endIndex = if endIndex = null then DateTime.FromText(ReadFromConfiguration("EndIndex")) else endIndex,
+        interval = if interval = null then Duration.FromText(ReadFromConfiguration("Interval")) else interval,
 
         // construct Data View data window query
         dataQuery = "/api/"
@@ -75,9 +75,9 @@
             "/Dataviews/"
             &dataViewId&
             "/Data/Interpolated?startIndex="
-            &DateTime.ToText(startIndex, "yyyy-MM-ddThh:mm:ssZ")&
+            &DateTime.ToText(startIndex, "o")&
             "&endIndex="
-            &DateTime.ToText(endIndex, "yyyy-MM-ddThh:mm:ssZ")&
+            &DateTime.ToText(endIndex, "o")&
             "&count=250000&interval="
             &Duration.ToText(interval),
 

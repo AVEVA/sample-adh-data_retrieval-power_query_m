@@ -11,9 +11,9 @@
         result,
 
     // read configuration parameters
-    clientId = ReadFromConfiguration("clientId"),
-    clientSecret = ReadFromConfiguration("clientSecret"),
-    resourceUri = ReadFromConfiguration("resourceUri"),
+    clientId = ReadFromConfiguration("ClientId"),
+    clientSecret = ReadFromConfiguration("ClientSecret"),
+    resourceUri = ReadFromConfiguration("ResourceUri"),
     // split URL to avoid Power BI Service error regarding unsupported function Web.Contents
     authUrlPart1 = resourceUri & "/identity",
     authUrlPart2 = "/connect/token",
@@ -26,7 +26,7 @@
         & escapedClientSecret
         & "&grant_type=client_credentials",
     authPOSTBodyBinary = Text.ToBinary(authPOSTBody),
-    // Authentiate
+    // Authenticate
     GetJson =
         try
             Web.Contents(

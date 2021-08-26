@@ -70,12 +70,12 @@ Note: If you are using the Power BI service you will be unable to access the ref
   1. Uncheck **Enable M Intellisese...**
   1. Click **Ok**
 
-### Running the sample
+### Running the tests
 
 1. Load the .csproj from the OCSPowerQueryTest directory above this in Visual Studio
 1. Rebuild project
 1. Open Test Explorer and make sure there are tests showing
-1. Run the test
+1. Run the tests
 
 Note: Do not touch your mouse or keyboard while the the tests are running since this could interfere with the automated process.
 

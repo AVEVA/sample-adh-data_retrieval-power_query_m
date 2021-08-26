@@ -1,54 +1,53 @@
-﻿using FlaUI.Core.AutomationElements;
+﻿using System;
+using System.IO;
+using FlaUI.Core.AutomationElements;
 using FlaUI.Core.Definitions;
 using FlaUI.Core.Tools;
 using FlaUI.UIA3;
-using System;
-using System.IO;
-using System.Threading;
 using Xunit;
 
 namespace OCSPowerQueryTest
 {
-    public class UnitTests
+    public class UnitTest1
     {
         [Fact]
         public void GetDataViewTest()
         {
-            Assert.True(testPowerQueryFunction("GetDataView.pq"));
+            Assert.True(TestPowerQueryFunction("GetDataView.pq"));
         }
 
         [Fact]
         public void GetAssetTest()
         {
-            Assert.True(testPowerQueryFunction("GetAsset.pq"));
+            Assert.True(TestPowerQueryFunction("GetAsset.pq"));
         }
 
         [Fact]
         public void GetAssetsTest()
         {
-            Assert.True(testPowerQueryFunction("GetAssets.pq"));
+            Assert.True(TestPowerQueryFunction("GetAssets.pq"));
         }
 
         /// <summary>
         /// This function opens Power BI Desktop and executes the provided power query file
         /// </summary>
-        /// <param powerQueryFile>The power query file to test</param>
+        /// <param name="powerQueryFile">The power query file to test</param>
         /// <returns>true if successful</returns>
-        private static bool testPowerQueryFunction(string powerQueryFile)
+        private static bool TestPowerQueryFunction(string powerQueryFile)
         {
             bool success = false;
 
             // Read in power query script to run
-            var pqScript = "";
+            var powerQueryScript = string.Empty;
             try
             {
                 using (var sr = new StreamReader(powerQueryFile))
                 {
-                    pqScript = sr.ReadToEnd();
+                    powerQueryScript = sr.ReadToEnd();
                 }
 
                 // Replace placeholder with configuration path
-                pqScript = pqScript.Replace("PATH_TO_CONFIG", $"{Directory.GetCurrentDirectory()}/appsettings.json");
+                powerQueryScript = powerQueryScript.Replace("PATH_TO_CONFIG", $"{Directory.GetCurrentDirectory()}/appsettings.json");
             }
             catch (IOException e)
             {
@@ -64,11 +63,11 @@ namespace OCSPowerQueryTest
                     var window = app.GetMainWindow(automation);
                     var desktop = window.Parent;
 
-                    try 
+                    try
                     {
                         // Close the start window
-                        var koStart = WaitForElement(() => window.FindFirstChild(cf => cf.ByAutomationId("KoStartDialog")));
-                        var getDataButton = WaitForElement(() => koStart.FindFirstDescendant(cf => cf.ByName("Get data"))?.AsButton());
+                        var startDialog = WaitForElement(() => window.FindFirstChild(cf => cf.ByAutomationId("startDialogDialog")));
+                        var getDataButton = WaitForElement(() => startDialog.FindFirstDescendant(cf => cf.ByName("Get data"))?.AsButton());
                         getDataButton?.Invoke();
 
                         // Select Blank Query
@@ -93,7 +92,7 @@ namespace OCSPowerQueryTest
 
                         // Copy script into the advanced editor text field
                         var advancedEditorEdit = WaitForElement(() => advancedEditor.FindFirstDescendant(cf => cf.ByControlType(ControlType.Edit))?.AsTextBox());
-                        advancedEditorEdit.Text = $"{pqScript}";
+                        advancedEditorEdit.Text = $"{powerQueryScript}";
                         var doneButton = WaitForElement(() => advancedEditor.FindFirstDescendant(cf => cf.ByName("Done"))?.AsButton());
                         doneButton?.Invoke();
 
@@ -130,7 +129,7 @@ namespace OCSPowerQueryTest
         /// <summary>
         /// This is a helper function to allow time for elements to load by continuously trying to retrieve said element
         /// </summary>
-        /// <param getter>The getter function to retry until the timeout window is surpassed</param>
+        /// <param name="getter">The getter function to retry until the timeout window is surpassed</param>
         /// <returns>The final result returned by RetryResult</returns>
         private static T WaitForElement<T>(Func<T> getter)
         {
@@ -140,10 +139,11 @@ namespace OCSPowerQueryTest
             {
                 retry = Retry.WhileNull<T>(
                     () => getter(),
-                    TimeSpan.FromSeconds(5*count), null, false, true);
+                    TimeSpan.FromSeconds(5 * count), null, false, true);
 
                 count++;
-            } while (!retry.Success && count < 4);
+            } 
+            while (!retry.Success && count < 4);
 
             if (!retry.Success)
             {
@@ -152,6 +152,5 @@ namespace OCSPowerQueryTest
 
             return retry.Result;
         }
-
     }
 }

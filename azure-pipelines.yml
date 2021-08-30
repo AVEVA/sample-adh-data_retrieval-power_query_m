@@ -65,7 +65,7 @@ jobs:
         parameters:
           fileOriginal: $(CredFile)
           fileLibrary: $(CredFileLibrary)
-          filePath: $(projPath)\OCSPowerQuery
+          filePath: \OCSPowerQuery
 
       - task: DotNetCoreCLI@2
         displayName: 'Build'

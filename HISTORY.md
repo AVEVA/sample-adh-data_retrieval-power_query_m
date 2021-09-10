@@ -1,5 +1,5 @@
 # Version History
 
-## 1.0.0 / 2021-08-15
+## 1.0.0 / 2021-09-10
 
 - Initial public release

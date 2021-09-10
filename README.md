@@ -15,7 +15,7 @@ The sample is configured using the file [appsettings.placeholder.json](ClientCre
 
 Replace the placeholders in the `appsettings.json` file with your Tenant Id, Client Id and Client Secret, Namespace Id, and the current Api Version. Optionally, a default Asset, Asset Query, Data View, start index, end index, and interval can be configured for queries.
 
-## Running the sample
+## Running the Sample
 
 ### Prerequisites
 
@@ -29,7 +29,7 @@ Replace the placeholders in the `appsettings.json` file with your Tenant Id, Cli
 1. In the **Get Data** window search for "Blank Query"
 1. Select **Blank Query** and click the **Connect** button
 1. Click the **Advanced Editor** button in the Query section of the ribbon in the **Power Query Editor**
-1. Paste the query from the desired .pq file
+1. Paste the query from the desired .pq file. See the [Power Query Functions](#power-query-functions) section below for descriptions of each provided function
 1. Replace the "PATH_TO_CONFIG" placeholder with the path to your 'appsettings.json' file
 1. Click the **Done** button
 1. If the .pq file defines a function, fill out the parameters and click the **Invoke** button
@@ -45,7 +45,7 @@ Note: If you are using the Power BI service you will be unable to access the ref
 1. Under the **Data** section of the ribbon, click the **Get Data** button
 1. In the dropdown drill down to **From Other Sources** and click **Blank Query**
 1. Click the **Advanced Editor** button in the Query section of the ribbon in the *Power Query Editor*
-1. Paste the query from the desired .pq file
+1. Paste the query from the desired .pq file. See the [Power Query Functions](#power-query-functions) section below for descriptions of each provided function
 1. Replace the "PATH_TO_CONFIG" placeholder with the path to your 'appsettings.json' file
 1. Click the **Done** button
 1. If the .pq file defines a function, fill out the parameters and click the **Invoke** button
@@ -53,7 +53,17 @@ Note: If you are using the Power BI service you will be unable to access the ref
 1. Selecting the data type of each column may also be necessary. To do this automatically for all columns, select the **Transform** section of the ribbon, highlight all columns of your table, and click the **Detect Data Type** button in the ribbon under **Any Column**
 1. Click **Close & Apply** in the **Home** section of the ribbon
 
-## Testing the sample
+### Power Query Functions
+
+| Function       | Description                                                                                                                                                                                                                                                                 |
+| -------------- | -----------                                                                                                                                                                                                                                                                 |
+| GetAsset.pq    | Retrieves the data of a single asset. Please note that this function assumes that the referenced streams have a 'Timestamp' and 'Value' property as is the case for PI to OCS streams.                                                                                      |
+| GetAssetIds.pq | Retrieves a list of asset Ids based on a search query which can then be used to request data from each asset in the list.  Please note that this function assumes that the referenced streams have a 'Timestamp' and 'Value' property as is the case for PI to OCS streams. |
+| GetAssets.pq   | Uses the GetAssetIds function from above to request data from assets matching the specified query. Please note that this function assumes that the referenced streams have a 'Timestamp' and 'Value' property as is the case for PI to OCS streams.                         |
+| GetDataView.pq | Retrieves the data of a single Data View.                                                                                                                                                                                                                                   |
+| GetToken.pq    | Returns a token for the provided client Id and client Secret. Each of the functions above uses this function and this function could be referenced in each instead of being copied. This function can also serve as a starting point for custom queries or troubleshooting. |
+
+## Testing the Sample
 
 ### Prerequisites for Testing
 
@@ -70,7 +80,7 @@ Note: If you are using the Power BI service you will be unable to access the ref
   1. Uncheck **Enable M Intellisese...**
   1. Click **Ok**
 
-### Running the tests
+### Running the Tests
 
 1. Load the .csproj from the OCSPowerQueryTest directory above this in Visual Studio
 1. Rebuild project

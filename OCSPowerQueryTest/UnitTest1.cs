@@ -59,6 +59,7 @@ namespace OCSPowerQueryTest
             {
                 using (var app = FlaUI.Core.Application.Launch(@"C:\Program Files\Microsoft Power BI Desktop\bin\PBIDesktop.exe"))
                 {
+                    app.CloseTimeout = new TimeSpan(0, 0, 0);
                     app.WaitWhileMainHandleIsMissing();
                     var window = app.GetMainWindow(automation);
                     var desktop = window.Parent;

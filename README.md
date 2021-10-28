@@ -1,6 +1,6 @@
 # OCS Power Query M Data Retrieval Sample
 
-**Version:** 1.0.0
+**Version:** 1.1.0
 
 [![Build Status](https://dev.azure.com/osieng/engineering/_apis/build/status/product-readiness/OCS/osisoft.sample-ocs-data_retrieval-power_query_m?repoName=osisoft%2Fsample-ocs-data_retrieval-power_query_m&branchName=main)](https://dev.azure.com/osieng/engineering/_build/latest?definitionId=3963&repoName=osisoft%2Fsample-ocs-data_retrieval-power_query_m&branchName=main)
 
@@ -13,7 +13,7 @@ The sample code in this repository demonstrates how to connect to OCS and pull d
 
 The sample is configured using the file [appsettings.placeholder.json](ClientCredentialFlow/appsettings.placeholder.json). Before editing, rename this file to `appsettings.json`. This repository's `.gitignore` rules should prevent the file from ever being checked in to any fork or branch, to ensure credentials are not compromised.
 
-Replace the placeholders in the `appsettings.json` file with your Tenant Id, Client Id and Client Secret, Namespace Id, and the current Api Version. Optionally, a default Asset, Asset Query, Data View, start index, end index, and interval can be configured for queries.
+Replace the placeholders in the `appsettings.json` file with your Tenant Id, Client Id and Client Secret, Namespace Id, the current Api Version, and Community Id if querying community data. Optionally, a default Asset, Asset Query, Community Query, Community Stream Url, Data View, start index, end index, and interval can be configured for queries.
 
 ## Running the Sample
 
@@ -55,13 +55,16 @@ Note: If you are using the Power BI service you will be unable to access the ref
 
 ### Power Query Functions
 
-| Function       | Description                                                                                                                                                                                                                                                                 |
-| -------------- | -----------                                                                                                                                                                                                                                                                 |
-| GetAsset.pq    | Retrieves the data of a single asset. Please note that this function assumes that the referenced streams have a 'Timestamp' and 'Value' property as is the case for PI to OCS streams.                                                                                      |
-| GetAssetIds.pq | Retrieves a list of asset Ids based on a search query which can then be used to request data from each asset in the list.  Please note that this function assumes that the referenced streams have a 'Timestamp' and 'Value' property as is the case for PI to OCS streams. |
-| GetAssets.pq   | Uses the GetAssetIds function from above to request data from assets matching the specified query. Please note that this function assumes that the referenced streams have a 'Timestamp' and 'Value' property as is the case for PI to OCS streams.                         |
-| GetDataView.pq | Retrieves the data of a single Data View. Please note that this function makes calls for interpolated data. The query could be changed to retrieve stored values. In addition, the maximum page size to retrieve is set to the maximum of 250,000 by default.               |
-| GetToken.pq    | Returns a token for the provided client Id and client Secret. Each of the functions above uses this function and this function could be referenced in each instead of being copied. This function can also serve as a starting point for custom queries or troubleshooting. |
+| Function                  | Description                                                                                                                                                                                                                                                                 |
+| ------------------------- | -----------                                                                                                                                                                                                                                                                 |
+| GetAsset.pq               | Retrieves the data of a single asset. Please note that this function assumes that the referenced streams have a 'Timestamp' and 'Value' property as is the case for PI to OCS streams.                                                                                      |
+| GetAssetIds.pq            | Retrieves a list of asset Ids based on a search query which can then be used to request data from each asset in the list.  Please note that this function assumes that the referenced streams have a 'Timestamp' and 'Value' property as is the case for PI to OCS streams. |
+| GetAssets.pq              | Uses the GetAssetIds function from above to request data from assets matching the specified query. Please note that this function assumes that the referenced streams have a 'Timestamp' and 'Value' property as is the case for PI to OCS streams.                         |
+| GetCommunityStream.pq     | Retrieves the data of a single community stream. Please note that this function assumes that the streams have a 'Timestamp' and 'Value' property as is the case for PI to OCS streams.                                                                                      |
+| GetCommunityStreamUrls.pq | Retrieves a list of community stream urls based on a search query which can then be used to request data from each stream in the list.  Please note that this function assumes that the have a 'Timestamp' and 'Value' property as is the case for PI to OCS streams.       |
+| GetCommunityStreams.pq    | Uses the GetCommunityStreamUrls function from above to request data from community streams matching the specified query. Please note that this function assumes that the streams have a 'Timestamp' and 'Value' property as is the case for PI to OCS streams.              |
+| GetDataView.pq            | Retrieves the data of a single Data View. Please note that this function makes calls for interpolated data. The query could be changed to retrieve stored values. In addition, the maximum page size to retrieve is set to the maximum of 250,000 by default.               |
+| GetToken.pq               | Returns a token for the provided client Id and client Secret. Each of the functions above uses this function and this function could be referenced in each instead of being copied. This function can also serve as a starting point for custom queries or troubleshooting. |
 
 ## Testing the Sample
 

@@ -49,6 +49,15 @@
     <Content Include="GetAssets.pq">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="GetCommunityStream.pq">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="GetCommunityStreams.pq">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="GetCommunityStreamUrls.pq">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="GetDataView.pq">
       <SubType>Content</SubType>
     </Content>

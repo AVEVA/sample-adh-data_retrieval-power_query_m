@@ -1,4 +1,4 @@
-﻿(query as nullable text) as table =>
+﻿(query as nullable text, communityId as nullable text) as table =>
     let
         // helper function for reading from a configuration file
         ReadFromConfiguration = (configurationParameter as text) =>
@@ -54,32 +54,37 @@
         // read configuration parameters
         resourceUri = ReadFromConfiguration("ResourceUri"),
         tenantId = ReadFromConfiguration("TenantId"),
-        namespaceId = ReadFromConfiguration("NamespaceId"),
         apiVersion = ReadFromConfiguration("ApiVersion"),
 
         // set default parameters from configuration
-        query = if query = null then ReadFromConfiguration("AssetQuery") else query,
+        query = if query = null then ReadFromConfiguration("CommunityQuery") else query,
+        communityId = if communityId = null then ReadFromConfiguration("CommunityId") else communityId,
 
         // PI Cloud REST API query - window
         dataQuery = "/api/"
             &apiVersion&
             "/Tenants/"
             &tenantId&
-            "/Namespaces/"
-            &namespaceId&
-            "/Assets/?query="     
+            "/Search/Communities/"
+            &communityId&
+            "/Streams?query="     
             &query,
 
         // Query PI Cloud REST API
-        GetJsonQuery = Json.Document(
+        getJsonQuery = Json.Document(
             Web.Contents(
                 resourceUri,
-                [RelativePath=dataQuery, 
-                Headers=[Authorization=GetToken()]
+                [
+                    RelativePath=dataQuery, 
+                    Headers=
+                    [
+                        Authorization=GetToken(), 
+                        #"Community-Id"=communityId
+                    ]
                 ]
             )
         ),
-        tableOfIds = Table.FromList(GetJsonQuery, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
-        expandedTableOfIds = Table.ExpandRecordColumn(tableOfIds, "Column1", {"Id"}, {"Id"})
+        tableOfData = Table.FromList(getJsonQuery, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+        expandedTableOfData = Table.ExpandRecordColumn(tableOfData, "Column1", {"Self"}, {"Self"})
 in
-        expandedTableOfIds
+        expandedTableOfData

@@ -27,10 +27,6 @@ resources:
 
 variables:
   - template: '/miscellaneous/build_templates/variables.yml@templates'
-  - name: CredFile
-    value: appsettings.json
-  - name: CredFileLibrary
-    value: product-readiness.ocs-data_retrieval-power_query_m.json
   - name: analysisProject
     value: OCS_DataRetrieval_PowerQuery
 
@@ -39,12 +35,27 @@ jobs:
     pool:
       name: 00-OSIManaged-Test
       demands: COMPUTERNAME -equals $(buildAgent)
+    variables:
+      - name: DataViewId
+        value: $(DataViewId)
+      - name: AssetId
+        value: $(AssetId)
+      - name: AssetQuery
+        value: $(AssetQuery)
+      - name: CommunityQuery
+        value: $(CommunityQuery)
+      - name: StartIndex
+        value: $(StartIndex)
+      - name: EndIndex
+        value: $(EndIndex)
+      - name: StartIndex
+        value: $(StartIndex)
+      - name: Interval
+        value: $(Interval)
     steps:
-      - template: '/miscellaneous/build_templates/config.yml@templates'
+      - template: '/miscellaneous/build_templates/appsettings.yml@templates'
         parameters:
-          fileOriginal: $(CredFile)
-          fileLibrary: $(CredFileLibrary)
-          filePath: \OCSPowerQuery
+          secrets: 'TenantId, NamespaceId, CommunityId, ClientId, ClientSecret'
         
       - task: DotNetCoreCLI@2
         displayName: 'Run tests'
@@ -61,11 +72,7 @@ jobs:
       demands: COMPUTERNAME -equals $(buildAgent)
 
     steps:
-      - template: '/miscellaneous/build_templates/config.yml@templates'
-        parameters:
-          fileOriginal: $(CredFile)
-          fileLibrary: $(CredFileLibrary)
-          filePath: \OCSPowerQuery
+      - template: '/miscellaneous/build_templates/appsettings.yml@templates'
 
       - task: DotNetCoreCLI@2
         displayName: 'Build'

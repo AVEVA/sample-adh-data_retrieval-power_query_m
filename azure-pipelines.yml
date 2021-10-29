@@ -38,7 +38,7 @@ jobs:
     steps:
       - template: '/miscellaneous/build_templates/appsettings.yml@templates'
         parameters:
-          secrets: 'TenantId, NamespaceId, CommunityId, ClientId, ClientSecret'
+          secrets: 'TenantId, CommunityId, ClientId, ClientSecret'
         
       - task: DotNetCoreCLI@2
         displayName: 'Run tests'

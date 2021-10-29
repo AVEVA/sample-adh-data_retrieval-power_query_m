@@ -35,23 +35,6 @@ jobs:
     pool:
       name: 00-OSIManaged-Test
       demands: COMPUTERNAME -equals $(buildAgent)
-    variables:
-      - name: DataViewId
-        value: $(DataViewId)
-      - name: AssetId
-        value: $(AssetId)
-      - name: AssetQuery
-        value: $(AssetQuery)
-      - name: CommunityQuery
-        value: $(CommunityQuery)
-      - name: StartIndex
-        value: $(StartIndex)
-      - name: EndIndex
-        value: $(EndIndex)
-      - name: StartIndex
-        value: $(StartIndex)
-      - name: Interval
-        value: $(Interval)
     steps:
       - template: '/miscellaneous/build_templates/appsettings.yml@templates'
         parameters:

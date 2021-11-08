@@ -23,7 +23,7 @@ namespace OCSPowerQueryTest
         }
 
         [Fact]
-        public void GetCommunitStreamsTest()
+        public void GetCommunityStreamsTest()
         {
             Assert.True(TestPowerQueryFunction("GetCommunityStreams.pq"));
         }

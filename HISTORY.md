@@ -5,7 +5,6 @@
 - Update pipelines to use Azure Key Vault for secrets
 - Added Community Stream Queries
 
-
 ## 1.0.0 / 2021-09-10
 
 - Initial public release

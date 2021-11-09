@@ -17,15 +17,15 @@ namespace OCSPowerQueryTest
         }
 
         [Fact]
-        public void GetAssetTest()
-        {
-            Assert.True(TestPowerQueryFunction("GetAsset.pq"));
-        }
-
-        [Fact]
         public void GetAssetsTest()
         {
             Assert.True(TestPowerQueryFunction("GetAssets.pq"));
+        }
+
+        [Fact]
+        public void GetCommunityStreamsTest()
+        {
+            Assert.True(TestPowerQueryFunction("GetCommunityStreams.pq"));
         }
 
         /// <summary>

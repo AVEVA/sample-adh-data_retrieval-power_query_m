@@ -1,4 +1,4 @@
-﻿(assetId as nullable text, startIndex as nullable datetime, endIndex as nullable datetime, interval as nullable duration) as table =>
+﻿(assetId as nullable text, startIndex as nullable datetime, endIndex as nullable datetime) as table =>
     let
         // helper function for reading from a configuration file
         ReadFromConfiguration = (configurationParameter as text) =>
@@ -61,9 +61,8 @@
         assetId = if assetId = null then ReadFromConfiguration("AssetId") else assetId,
         startIndex = if startIndex = null then DateTime.FromText(ReadFromConfiguration("StartIndex")) else startIndex,
         endIndex = if endIndex = null then DateTime.FromText(ReadFromConfiguration("EndIndex")) else endIndex,
-        interval = if interval = null then Duration.FromText(ReadFromConfiguration("Interval")) else interval,
 
-        // construct Data View data window query
+        // construct Asset data query
         dataQuery = "/api/"
             &apiVersion&
             "/Tenants/"
@@ -88,6 +87,6 @@
     Results = getJsonQuery[Results],
     tableOfData = Record.ToTable(Results),
     expandedTableofData1 = Table.ExpandListColumn(tableOfData, "Value"),
-    expandedTableofData2 = Table.ExpandRecordColumn(expandedTableofData1, "Value", {"Timestamp", "Value"}, {"Value.Timestamp", "Value.Value"})
+    expandedTableofData2 = Table.ExpandRecordColumn(expandedTableofData1, "Value", {"Timestamp", "Value"}, {"Timestamp", "Value"})
 in
     expandedTableofData2

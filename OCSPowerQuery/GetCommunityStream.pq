@@ -1,4 +1,4 @@
-﻿(query as nullable text) as table =>
+﻿(communityStreamUrl as nullable text, communityId as nullable text, startIndex as nullable datetime, endIndex as nullable datetime) as table =>
     let
         // helper function for reading from a configuration file
         ReadFromConfiguration = (configurationParameter as text) =>
@@ -58,28 +58,30 @@
         apiVersion = ReadFromConfiguration("ApiVersion"),
 
         // set default parameters from configuration
-        query = if query = null then ReadFromConfiguration("AssetQuery") else query,
+        communityStreamUrl = if communityStreamUrl = null then ReadFromConfiguration("CommunityStreamUrl") else communityStreamUrl,
+        communityId = if communityId = null then ReadFromConfiguration("CommunityId") else communityId,
+        startIndex = if startIndex = null then DateTime.FromText(ReadFromConfiguration("StartIndex")) else startIndex,
+        endIndex = if endIndex = null then DateTime.FromText(ReadFromConfiguration("EndIndex")) else endIndex,
 
-        // PI Cloud REST API query - window
-        dataQuery = "/api/"
-            &apiVersion&
-            "/Tenants/"
-            &tenantId&
-            "/Namespaces/"
-            &namespaceId&
-            "/Assets/?query="     
-            &query,
+        // construct community stream data query
+        dataQuery = communityStreamUrl&
+            "/Data?startIndex="
+            &DateTime.ToText(startIndex, "o")&
+            "&endIndex="
+            &DateTime.ToText(endIndex, "o"),
 
-        // Query PI Cloud REST API
-        GetJsonQuery = Json.Document(
+        getJsonQuery = Json.Document(
             Web.Contents(
-                resourceUri,
-                [RelativePath=dataQuery, 
-                Headers=[Authorization=GetToken()]
+                dataQuery,
+                [
+                    Headers=[
+                        Authorization=GetToken(), 
+                        #"Community-Id"=communityId]
                 ]
             )
         ),
-        tableOfIds = Table.FromList(GetJsonQuery, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
-        expandedTableOfIds = Table.ExpandRecordColumn(tableOfIds, "Column1", {"Id"}, {"Id"})
-in
-        expandedTableOfIds
+        tableOfData = Table.FromList(getJsonQuery, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+        expandedTableofData = Table.ExpandRecordColumn(tableOfData, "Column1", {"Timestamp", "Value"}, {"Timestamp", "Value"}),
+        transformTypes = Table.TransformColumnTypes(expandedTableofData,{{"Timestamp", type datetime}})
+    in
+        transformTypes

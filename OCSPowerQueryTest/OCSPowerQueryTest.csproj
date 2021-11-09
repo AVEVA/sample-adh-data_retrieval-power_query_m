@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0-windows</TargetFramework>
@@ -27,6 +27,15 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\OCSPowerQuery\GetAssets.pq" Link="GetAssets.pq">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\OCSPowerQuery\GetCommunityStream.pq" Link="GetCommunityStream.pq">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\OCSPowerQuery\GetCommunityStreams.pq" Link="GetCommunityStreams.pq">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\OCSPowerQuery\GetCommunityStreamUrls.pq" Link="GetCommunityStreamUrls.pq">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\OCSPowerQuery\GetDataView.pq" Link="GetDataView.pq">

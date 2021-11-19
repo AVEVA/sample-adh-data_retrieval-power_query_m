@@ -133,9 +133,9 @@
             addColumn,
 
 
-        communityStreamUrlsTable = GetCommunityStreamUrls("Name:GE01.*", "eda693df-4c8f-49a3-a021-1363f6a40f45"),
+        communityStreamUrlsTable = GetCommunityStreamUrls(query, communityId),
         communityStreamUrlsList = communityStreamUrlsTable[Self],
-        communityStreamData = Table.Combine(List.Transform(communityStreamUrlsList, each GetCommunityStream(_, "eda693df-4c8f-49a3-a021-1363f6a40f45", startIndex, endIndex))),
+        communityStreamData = Table.Combine(List.Transform(communityStreamUrlsList, each GetCommunityStream(_, communityId, startIndex, endIndex))),
         mergedTable = Table.NestedJoin(communityStreamData, {"Stream Id"}, communityStreamUrlsTable, {"Id"}, "Invoked Function", JoinKind.LeftOuter),
         expandedTable = Table.ExpandTableColumn(mergedTable, "Invoked Function", {"Name"}, {"Stream Name"})
 in

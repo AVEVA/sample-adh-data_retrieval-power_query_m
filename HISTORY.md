@@ -1,5 +1,9 @@
 # Version History
 
+## 1.1.1 / 2021-11-25
+
+- Remove hard coded values
+
 ## 1.1.0 / 2021-11-06
 
 - Update pipelines to use Azure Key Vault for secrets

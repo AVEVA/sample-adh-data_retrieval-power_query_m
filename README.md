@@ -1,6 +1,6 @@
 # OCS Power Query M Data Retrieval Sample
 
-**Version:** 1.1.0
+**Version:** 1.1.1
 
 [![Build Status](https://dev.azure.com/osieng/engineering/_apis/build/status/product-readiness/OCS/osisoft.sample-ocs-data_retrieval-power_query_m?repoName=osisoft%2Fsample-ocs-data_retrieval-power_query_m&branchName=main)](https://dev.azure.com/osieng/engineering/_build/latest?definitionId=3963&repoName=osisoft%2Fsample-ocs-data_retrieval-power_query_m&branchName=main)
 

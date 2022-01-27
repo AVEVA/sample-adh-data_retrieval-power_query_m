@@ -28,7 +28,7 @@ resources:
 variables:
   - template: '/miscellaneous/build_templates/variables.yml@templates'
   - name: analysisProject
-    value: ADH_DataRetrieval_PowerQuery
+    value: OCS_DataRetrieval_PowerQuery
 
 jobs:
   - job: Tests

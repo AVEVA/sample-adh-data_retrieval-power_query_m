@@ -28,7 +28,7 @@ resources:
 variables:
   - template: '/miscellaneous/build_templates/variables.yml@templates'
   - name: analysisProject
-    value: OCS_DataRetrieval_PowerQuery
+    value: ADH_DataRetrieval_PowerQuery
 
 jobs:
   - job: Tests
@@ -38,7 +38,7 @@ jobs:
     steps:
       - template: '/miscellaneous/build_templates/appsettings.yml@templates'
         parameters:
-          secrets: 'TenantId, CommunityId, ClientId, ClientSecret'
+          secrets: 'TenantId, CommunityId, ClientId, ClientSecret, Resource'
         
       - task: DotNetCoreCLI@2
         displayName: 'Run tests'
@@ -46,7 +46,7 @@ jobs:
           command: test
           publishTestResults: true
           testRunTitle: '$(Agent.JobName) on $(Agent.OS)'
-          workingDirectory: $(Build.SourcesDirectory)\OCSPowerQueryTest
+          workingDirectory: $(Build.SourcesDirectory)\ADHPowerQueryTest
           timeoutInMinutes: 3
 
   - job: Analysis

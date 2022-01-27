@@ -1,5 +1,9 @@
 # Version History
 
+## 1.2.0 / 2022-01-27
+
+- Updated for AVEVA Data Hub
+
 ## 1.1.1 / 2021-11-25
 
 - Remove hard coded values

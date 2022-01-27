@@ -68,11 +68,6 @@
       <SubType>Content</SubType>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="appsettings.json">
-      <SubType>Content</SubType>
-    </Content>
-  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <UsingTask TaskName="BuildExtension" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v12.0.dll">
     <ParameterGroup>

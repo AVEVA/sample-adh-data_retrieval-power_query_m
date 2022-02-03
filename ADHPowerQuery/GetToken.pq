@@ -13,7 +13,7 @@
     // read configuration parameters
     clientId = ReadFromConfiguration("ClientId"),
     clientSecret = ReadFromConfiguration("ClientSecret"),
-    resourceUri = ReadFromConfiguration("ResourceUri"),
+    resourceUri = ReadFromConfiguration("Resource"),
     // split URL to avoid Power BI Service error regarding unsupported function Web.Contents
     authUrl = "/identity/connect/token",
     // Construct message for authentication

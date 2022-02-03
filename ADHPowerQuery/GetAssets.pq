@@ -17,7 +17,7 @@
             // read configuration parameters
             clientId = ReadFromConfiguration("ClientId"),
             clientSecret = ReadFromConfiguration("ClientSecret"),
-            resourceUri = ReadFromConfiguration("ResourceUri"),
+            resourceUri = ReadFromConfiguration("Resource"),
             // split URL to avoid Power BI Service error regarding unsupported function Web.Contents
             authUrl = "/identity/connect/token",
             // Construct message for authentication
@@ -55,7 +55,7 @@
         GetAssetIds = (query as nullable text) as table =>
         let 
             // read configuration parameters
-            resourceUri = ReadFromConfiguration("ResourceUri"),
+            resourceUri = ReadFromConfiguration("Resource"),
             tenantId = ReadFromConfiguration("TenantId"),
             namespaceId = ReadFromConfiguration("NamespaceId"),
             apiVersion = ReadFromConfiguration("ApiVersion"),
@@ -91,7 +91,7 @@
         GetAsset = (assetId as nullable text, startIndex as nullable datetime, endIndex as nullable datetime) as table =>
         let
             // read configuration parameters
-            resourceUri = ReadFromConfiguration("ResourceUri"),
+            resourceUri = ReadFromConfiguration("Resource"),
             tenantId = ReadFromConfiguration("TenantId"),
             namespaceId = ReadFromConfiguration("NamespaceId"),
             apiVersion = ReadFromConfiguration("ApiVersion"),

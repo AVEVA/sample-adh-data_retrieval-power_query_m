@@ -1,13 +1,16 @@
-# OCS Power Query M Data Retrieval Sample
+# ADH Power Query M Data Retrieval Sample
 
-**Version:** 1.1.1
+| :loudspeaker: **Notice**: Samples have been updated to reflect that they work on AVEVA Data Hub. The samples also work on OSIsoft Cloud Services unless otherwise noted. |
+| -----------------------------------------------------------------------------------------------|  
 
-[![Build Status](https://dev.azure.com/osieng/engineering/_apis/build/status/product-readiness/OCS/osisoft.sample-ocs-data_retrieval-power_query_m?repoName=osisoft%2Fsample-ocs-data_retrieval-power_query_m&branchName=main)](https://dev.azure.com/osieng/engineering/_build/latest?definitionId=3963&repoName=osisoft%2Fsample-ocs-data_retrieval-power_query_m&branchName=main)
+**Version:** 1.2.0
+
+[![Build Status](https://dev.azure.com/osieng/engineering/_apis/build/status/product-readiness/ADH/aveva.sample-adh-data_retrieval-power_query_m?branchName=main)](https://dev.azure.com/osieng/engineering/_build/latest?definitionId=3963&branchName=main)
 
 Built with .NET 5.0
 
 
-The sample code in this repository demonstrates how to connect to OCS and pull data from either Data Views or Assets using Power Query M. Power Query works with a variety of Microsoft products such as Analysis Services, Excel, and Power BI workbooks. For more information on Power Query M please refer to [Microsoft's documentation](https://docs.microsoft.com/en-us/powerquery-m/).
+The sample code in this repository demonstrates how to connect to ADH and pull data from either Data Views or Assets using Power Query M. Power Query works with a variety of Microsoft products such as Analysis Services, Excel, and Power BI workbooks. For more information on Power Query M please refer to [Microsoft's documentation](https://docs.microsoft.com/en-us/powerquery-m/).
 
 ## Requirements
 
@@ -19,7 +22,7 @@ Replace the placeholders in the `appsettings.json` file with your Tenant Id, Cli
 
 ### Prerequisites
 
-- Register a Client Credential client in OCS.
+- Register a Client Credential client in ADH.
 - Replace the placeholders in the `appsettings.json` as mentioned above.
 
 ### Using Power BI
@@ -57,12 +60,12 @@ Note: If you are using the Power BI service you will be unable to access the ref
 
 | Function                  | Description                                                                                                                                                                                                                                                                 |
 | ------------------------- | -----------                                                                                                                                                                                                                                                                 |
-| GetAsset.pq               | Retrieves the data of a single asset. Please note that this function assumes that the referenced streams have a 'Timestamp' and 'Value' property as is the case for PI to OCS streams.                                                                                      |
-| GetAssetIds.pq            | Retrieves a list of asset Ids based on a search query which can then be used to request data from each asset in the list.  Please note that this function assumes that the referenced streams have a 'Timestamp' and 'Value' property as is the case for PI to OCS streams. |
-| GetAssets.pq              | Uses the GetAssetIds function from above to request data from assets matching the specified query. Please note that this function assumes that the referenced streams have a 'Timestamp' and 'Value' property as is the case for PI to OCS streams.                         |
-| GetCommunityStream.pq     | Retrieves the data of a single community stream. Please note that this function assumes that the streams have a 'Timestamp' and 'Value' property as is the case for PI to OCS streams.                                                                                      |
-| GetCommunityStreamUrls.pq | Retrieves a list of community stream urls based on a search query which can then be used to request data from each stream in the list.  Please note that this function assumes that the have a 'Timestamp' and 'Value' property as is the case for PI to OCS streams.       |
-| GetCommunityStreams.pq    | Uses the GetCommunityStreamUrls function from above to request data from community streams matching the specified query. Please note that this function assumes that the streams have a 'Timestamp' and 'Value' property as is the case for PI to OCS streams.              |
+| GetAsset.pq               | Retrieves the data of a single asset. Please note that this function assumes that the referenced streams have a 'Timestamp' and 'Value' property as is the case for PI to ADH streams.                                                                                      |
+| GetAssetIds.pq            | Retrieves a list of asset Ids based on a search query which can then be used to request data from each asset in the list.  Please note that this function assumes that the referenced streams have a 'Timestamp' and 'Value' property as is the case for PI to ADH streams. |
+| GetAssets.pq              | Uses the GetAssetIds function from above to request data from assets matching the specified query. Please note that this function assumes that the referenced streams have a 'Timestamp' and 'Value' property as is the case for PI to ADH streams.                         |
+| GetCommunityStream.pq     | Retrieves the data of a single community stream. Please note that this function assumes that the streams have a 'Timestamp' and 'Value' property as is the case for PI to ADH streams.                                                                                      |
+| GetCommunityStreamUrls.pq | Retrieves a list of community stream urls based on a search query which can then be used to request data from each stream in the list.  Please note that this function assumes that the have a 'Timestamp' and 'Value' property as is the case for PI to ADH streams.       |
+| GetCommunityStreams.pq    | Uses the GetCommunityStreamUrls function from above to request data from community streams matching the specified query. Please note that this function assumes that the streams have a 'Timestamp' and 'Value' property as is the case for PI to ADH streams.              |
 | GetDataView.pq            | Retrieves the data of a single Data View. Please note that this function makes calls for interpolated data. The query could be changed to retrieve stored values. In addition, the maximum page size to retrieve is set to the maximum of 250,000 by default.               |
 | GetToken.pq               | Returns a token for the provided client Id and client Secret. Each of the functions above uses this function and this function could be referenced in each instead of being copied. This function can also serve as a starting point for custom queries or troubleshooting. |
 
@@ -85,7 +88,7 @@ Note: If you are using the Power BI service you will be unable to access the ref
 
 ### Running the Tests
 
-1. Load the .csproj from the OCSPowerQueryTest directory above this in Visual Studio
+1. Load the .csproj from the ADHPowerQueryTest directory above this in Visual Studio
 1. Rebuild project
 1. Open Test Explorer and make sure there are tests showing
 1. Run the tests
@@ -94,5 +97,5 @@ Note: Do not touch your mouse or keyboard while the the tests are running since 
 
 ---
 
-For the main OCS samples page [ReadMe](https://github.com/osisoft/OSI-Samples-OCS)  
-For the main OSIsoft samples page [ReadMe](https://github.com/osisoft/OSI-Samples)
+For the main ADH samples page [ReadMe](https://github.com/osisoft/OSI-Samples-OCS)  
+For the main AVEVA samples page [ReadMe](https://github.com/osisoft/OSI-Samples)

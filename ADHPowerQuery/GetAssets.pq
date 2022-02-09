@@ -1,4 +1,4 @@
-﻿(query as nullable text, communityId as nullable text, startIndex as nullable datetime, endIndex as nullable datetime) as table =>
+﻿(query as nullable text, startIndex as nullable datetime, endIndex as nullable datetime) as table =>
     let
         // helper function for reading from a configuration file
         ReadFromConfiguration = (configurationParameter as text) =>
@@ -10,14 +10,14 @@
 
         in
             result,
-
+        
         // helper function for retrieving a token
         GetToken = () =>
         let
             // read configuration parameters
             clientId = ReadFromConfiguration("ClientId"),
             clientSecret = ReadFromConfiguration("ClientSecret"),
-            resourceUri = ReadFromConfiguration("ResourceUri"),
+            resourceUri = ReadFromConfiguration("Resource"),
             // split URL to avoid Power BI Service error regarding unsupported function Web.Contents
             authUrl = "/identity/connect/token",
             // Construct message for authentication
@@ -51,64 +51,65 @@
         in
             AccessTokenHeader,
 
-        // helper function for retrieving Commmunity Stream urls
-        GetCommunityStreamUrls = (query as nullable text, communityId as nullable text) as table =>
-        let
+        // helper function for retrieving Asset Ids
+        GetAssetIds = (query as nullable text) as table =>
+        let 
             // read configuration parameters
-            resourceUri = ReadFromConfiguration("ResourceUri"),
+            resourceUri = ReadFromConfiguration("Resource"),
             tenantId = ReadFromConfiguration("TenantId"),
+            namespaceId = ReadFromConfiguration("NamespaceId"),
             apiVersion = ReadFromConfiguration("ApiVersion"),
 
             // set default parameters from configuration
-            query = if query = null then ReadFromConfiguration("CommunityQuery") else query,
-            communityId = if communityId = null then ReadFromConfiguration("CommunityId") else communityId,
+            query = if query = null then ReadFromConfiguration("AssetQuery") else query,
 
             // PI Cloud REST API query - window
             dataQuery = "/api/"
                 &apiVersion&
                 "/Tenants/"
                 &tenantId&
-                "/Search/Communities/"
-                &communityId&
-                "/Streams?query="     
+                "/Namespaces/"
+                &namespaceId&
+                "/Assets/?query="     
                 &query,
 
             // Query PI Cloud REST API
-            getJsonQuery = Json.Document(
+            GetJsonQuery = Json.Document(
                 Web.Contents(
                     resourceUri,
-                    [
-                        RelativePath=dataQuery, 
-                        Headers=
-                        [
-                            Authorization=GetToken(), 
-                            #"Community-Id"=communityId
-                        ]
+                    [RelativePath=dataQuery, 
+                    Headers=[Authorization=GetToken()]
                     ]
                 )
             ),
-            tableOfData = Table.FromList(getJsonQuery, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
-            expandedTableOfData = Table.ExpandRecordColumn(tableOfData, "Column1", {"Self", "Name", "Id"}, {"Self", "Name", "Id"})
+            tableOfIds = Table.FromList(GetJsonQuery, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+            expandedTableOfIds = Table.ExpandRecordColumn(tableOfIds, "Column1", {"Id"}, {"Id"})
         in
-            expandedTableOfData,
+            expandedTableOfIds,
 
-        // helper function for retrieving Community Stream data
-        GetCommunityStream = (communityStreamUrl as nullable text, communityId as nullable text, startIndex as nullable datetime, endIndex as nullable datetime) as table=>
+        // helper function for retrieving Asset data
+        GetAsset = (assetId as nullable text, startIndex as nullable datetime, endIndex as nullable datetime) as table =>
         let
             // read configuration parameters
-            resourceUri = ReadFromConfiguration("ResourceUri"),
+            resourceUri = ReadFromConfiguration("Resource"),
             tenantId = ReadFromConfiguration("TenantId"),
             namespaceId = ReadFromConfiguration("NamespaceId"),
             apiVersion = ReadFromConfiguration("ApiVersion"),
 
             // set default parameters from configuration
-            communityStreamUrl = if communityStreamUrl = null then ReadFromConfiguration("CommunityStreamUrl") else communityStreamUrl,
-            communityId = if communityId = null then ReadFromConfiguration("CommunityId") else communityId,
+            assetId = if assetId = null then ReadFromConfiguration("AssetId") else assetId,
             startIndex = if startIndex = null then DateTime.FromText(ReadFromConfiguration("StartIndex")) else startIndex,
             endIndex = if endIndex = null then DateTime.FromText(ReadFromConfiguration("EndIndex")) else endIndex,
 
-            // construct community stream data query
-            dataQuery = communityStreamUrl&
+            // construct asset data query
+            dataQuery = "/api/"
+                &apiVersion&
+                "/Tenants/"
+                &tenantId&
+                "/Namespaces/"
+                &namespaceId&
+                "/Assets/"
+                &assetId&
                 "/Data?startIndex="
                 &DateTime.ToText(startIndex, "o")&
                 "&endIndex="
@@ -116,27 +117,21 @@
 
             getJsonQuery = Json.Document(
                 Web.Contents(
-                    dataQuery,
-                    [
-                        Headers=[
-                            Authorization=GetToken(), 
-                            #"Community-Id"=communityId]
+                    resourceUri,
+                    [RelativePath=dataQuery, 
+                    Headers=[Authorization=GetToken()]
                     ]
                 )
             ),
-            tableOfData = Table.FromList(getJsonQuery, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
-            expandedTableofData = Table.ExpandRecordColumn(tableOfData, "Column1", {"Timestamp", "Value"}, {"Timestamp", "Value"}),
-            transformTypes = Table.TransformColumnTypes(expandedTableofData,{{"Timestamp", type datetime}}),
-            streamId = List.Last(Text.Split(communityStreamUrl, "/")),
-            addColumn = Table.AddColumn(transformTypes, "Stream Id", each streamId)
+            Results = getJsonQuery[Results],
+            tableOfData = Record.ToTable(Results),
+            expandedTableofData1 = Table.ExpandListColumn(tableOfData, "Value"),
+            expandedTableofData2 = Table.ExpandRecordColumn(expandedTableofData1, "Value", {"Timestamp", "Value"}, {"Timestamp", "Value"})
         in
-            addColumn,
+            expandedTableofData2,
 
-
-        communityStreamUrlsTable = GetCommunityStreamUrls(query, communityId),
-        communityStreamUrlsList = communityStreamUrlsTable[Self],
-        communityStreamData = Table.Combine(List.Transform(communityStreamUrlsList, each GetCommunityStream(_, communityId, startIndex, endIndex))),
-        mergedTable = Table.NestedJoin(communityStreamData, {"Stream Id"}, communityStreamUrlsTable, {"Id"}, "Invoked Function", JoinKind.LeftOuter),
-        expandedTable = Table.ExpandTableColumn(mergedTable, "Invoked Function", {"Name"}, {"Stream Name"})
-in
-        expandedTable
+        Source = GetAssetIds(query),
+        assetIds = Source[Id],
+        results = Table.Combine(List.Transform(assetIds, each GetAsset(_, startIndex, endIndex)))
+    in
+        results

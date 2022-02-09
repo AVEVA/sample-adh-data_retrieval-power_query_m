@@ -1,4 +1,4 @@
-﻿(dataViewId as nullable text, startIndex as nullable datetime, endIndex as nullable datetime, interval as nullable duration) as table =>
+﻿(communityStreamUrl as nullable text, communityId as nullable text, startIndex as nullable datetime, endIndex as nullable datetime) as table =>
     let
         // helper function for reading from a configuration file
         ReadFromConfiguration = (configurationParameter as text) =>
@@ -17,7 +17,7 @@
             // read configuration parameters
             clientId = ReadFromConfiguration("ClientId"),
             clientSecret = ReadFromConfiguration("ClientSecret"),
-            resourceUri = ReadFromConfiguration("ResourceUri"),
+            resourceUri = ReadFromConfiguration("Resource"),
             // split URL to avoid Power BI Service error regarding unsupported function Web.Contents
             authUrl = "/identity/connect/token",
             // Construct message for authentication
@@ -52,44 +52,36 @@
             AccessTokenHeader,
 
         // read configuration parameters
-        resourceUri = ReadFromConfiguration("ResourceUri"),
+        resourceUri = ReadFromConfiguration("Resource"),
         tenantId = ReadFromConfiguration("TenantId"),
         namespaceId = ReadFromConfiguration("NamespaceId"),
         apiVersion = ReadFromConfiguration("ApiVersion"),
 
         // set default parameters from configuration
-        dataViewId = if dataViewId = null then ReadFromConfiguration("DataViewId") else dataViewId,
+        communityStreamUrl = if communityStreamUrl = null then ReadFromConfiguration("CommunityStreamUrl") else communityStreamUrl,
+        communityId = if communityId = null then ReadFromConfiguration("CommunityId") else communityId,
         startIndex = if startIndex = null then DateTime.FromText(ReadFromConfiguration("StartIndex")) else startIndex,
         endIndex = if endIndex = null then DateTime.FromText(ReadFromConfiguration("EndIndex")) else endIndex,
-        interval = if interval = null then Duration.FromText(ReadFromConfiguration("Interval")) else interval,
 
-        // construct Data View data window query
-        dataQuery = "/api/"
-            &apiVersion&
-            "/Tenants/"
-            &tenantId&
-            "/Namespaces/"
-            &namespaceId&
-            "/Dataviews/"
-            &dataViewId&
-            "/Data/Interpolated?startIndex="
+        // construct community stream data query
+        dataQuery = communityStreamUrl&
+            "/Data?startIndex="
             &DateTime.ToText(startIndex, "o")&
             "&endIndex="
-            &DateTime.ToText(endIndex, "o")&
-            "&count=250000&interval="
-            &Duration.ToText(interval),
+            &DateTime.ToText(endIndex, "o"),
 
         getJsonQuery = Json.Document(
             Web.Contents(
-                resourceUri,
-                [RelativePath=dataQuery, 
-                Headers=[Authorization=GetToken()]
+                dataQuery,
+                [
+                    Headers=[
+                        Authorization=GetToken(), 
+                        #"Community-Id"=communityId]
                 ]
             )
         ),
-
-        // convert json result to table
-        tableOfData = Table.FromList(getJsonQuery, Splitter.SplitByNothing(), null, null, ExtraValues.Error)
-
-    in 
-        tableOfData
+        tableOfData = Table.FromList(getJsonQuery, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+        expandedTableofData = Table.ExpandRecordColumn(tableOfData, "Column1", {"Timestamp", "Value"}, {"Timestamp", "Value"}),
+        transformTypes = Table.TransformColumnTypes(expandedTableofData,{{"Timestamp", type datetime}})
+    in
+        transformTypes

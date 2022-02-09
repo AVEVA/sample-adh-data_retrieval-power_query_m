@@ -6,7 +6,7 @@ using FlaUI.Core.Tools;
 using FlaUI.UIA3;
 using Xunit;
 
-namespace OCSPowerQueryTest
+namespace ADHPowerQueryTest
 {
     public class UnitTest1
     {

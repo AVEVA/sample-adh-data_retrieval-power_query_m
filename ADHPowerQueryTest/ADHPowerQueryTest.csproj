@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <AdditionalFiles Remove="C:\Projects\samples\sample-ocs-data_retrieval-power_query_m\stylecop.json" />
+    <AdditionalFiles Remove="C:\Projects\samples\sample-adh-data_retrieval-power_query_m\stylecop.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -16,43 +16,40 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\OCSPowerQuery\appsettings.json" Link="appsettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\OCSPowerQuery\appsettings.placeholder.json" Link="appsettings.placeholder.json" />
+    <Content Include="..\ADHPowerQuery\appsettings.placeholder.json" Link="appsettings.placeholder.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\OCSPowerQuery\GetAsset.pq" Link="GetAsset.pq">
+    <None Include="..\ADHPowerQuery\GetAsset.pq" Link="GetAsset.pq">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\OCSPowerQuery\GetAssets.pq" Link="GetAssets.pq">
+    <None Include="..\ADHPowerQuery\GetAssets.pq" Link="GetAssets.pq">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\OCSPowerQuery\GetCommunityStream.pq" Link="GetCommunityStream.pq">
+    <None Include="..\ADHPowerQuery\GetCommunityStream.pq" Link="GetCommunityStream.pq">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\OCSPowerQuery\GetCommunityStreams.pq" Link="GetCommunityStreams.pq">
+    <None Include="..\ADHPowerQuery\GetCommunityStreams.pq" Link="GetCommunityStreams.pq">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\OCSPowerQuery\GetCommunityStreamUrls.pq" Link="GetCommunityStreamUrls.pq">
+    <None Include="..\ADHPowerQuery\GetCommunityStreamUrls.pq" Link="GetCommunityStreamUrls.pq">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\OCSPowerQuery\GetDataView.pq" Link="GetDataView.pq">
+    <None Include="..\ADHPowerQuery\GetDataView.pq" Link="GetDataView.pq">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\OCSPowerQuery\GetToken.pq" Link="GetToken.pq">
+    <None Include="..\ADHPowerQuery\GetToken.pq" Link="GetToken.pq">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FlaUI.UIA3" Version="3.2.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.2">
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -62,7 +59,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="coverlet.collector" Version="3.1.0">
+    <PackageReference Include="coverlet.collector" Version="3.1.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>

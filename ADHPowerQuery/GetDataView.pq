@@ -1,4 +1,4 @@
-﻿(assetId as nullable text, startIndex as nullable datetime, endIndex as nullable datetime) as table =>
+﻿(dataViewId as nullable text, startIndex as nullable datetime, endIndex as nullable datetime, interval as nullable duration) as table =>
     let
         // helper function for reading from a configuration file
         ReadFromConfiguration = (configurationParameter as text) =>
@@ -17,7 +17,7 @@
             // read configuration parameters
             clientId = ReadFromConfiguration("ClientId"),
             clientSecret = ReadFromConfiguration("ClientSecret"),
-            resourceUri = ReadFromConfiguration("ResourceUri"),
+            resourceUri = ReadFromConfiguration("Resource"),
             // split URL to avoid Power BI Service error regarding unsupported function Web.Contents
             authUrl = "/identity/connect/token",
             // Construct message for authentication
@@ -52,29 +52,32 @@
             AccessTokenHeader,
 
         // read configuration parameters
-        resourceUri = ReadFromConfiguration("ResourceUri"),
+        resourceUri = ReadFromConfiguration("Resource"),
         tenantId = ReadFromConfiguration("TenantId"),
         namespaceId = ReadFromConfiguration("NamespaceId"),
         apiVersion = ReadFromConfiguration("ApiVersion"),
 
         // set default parameters from configuration
-        assetId = if assetId = null then ReadFromConfiguration("AssetId") else assetId,
+        dataViewId = if dataViewId = null then ReadFromConfiguration("DataViewId") else dataViewId,
         startIndex = if startIndex = null then DateTime.FromText(ReadFromConfiguration("StartIndex")) else startIndex,
         endIndex = if endIndex = null then DateTime.FromText(ReadFromConfiguration("EndIndex")) else endIndex,
+        interval = if interval = null then Duration.FromText(ReadFromConfiguration("Interval")) else interval,
 
-        // construct Asset data query
+        // construct Data View data window query
         dataQuery = "/api/"
             &apiVersion&
             "/Tenants/"
             &tenantId&
             "/Namespaces/"
             &namespaceId&
-            "/Assets/"
-            &assetId&
-            "/Data?startIndex="
+            "/Dataviews/"
+            &dataViewId&
+            "/Data/Interpolated?startIndex="
             &DateTime.ToText(startIndex, "o")&
             "&endIndex="
-            &DateTime.ToText(endIndex, "o"),
+            &DateTime.ToText(endIndex, "o")&
+            "&count=250000&interval="
+            &Duration.ToText(interval),
 
         getJsonQuery = Json.Document(
             Web.Contents(
@@ -84,9 +87,9 @@
                 ]
             )
         ),
-    Results = getJsonQuery[Results],
-    tableOfData = Record.ToTable(Results),
-    expandedTableofData1 = Table.ExpandListColumn(tableOfData, "Value"),
-    expandedTableofData2 = Table.ExpandRecordColumn(expandedTableofData1, "Value", {"Timestamp", "Value"}, {"Timestamp", "Value"})
-in
-    expandedTableofData2
+
+        // convert json result to table
+        tableOfData = Table.FromList(getJsonQuery, Splitter.SplitByNothing(), null, null, ExtraValues.Error)
+
+    in 
+        tableOfData

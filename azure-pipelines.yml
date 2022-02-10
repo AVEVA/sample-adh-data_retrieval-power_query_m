@@ -33,8 +33,8 @@ variables:
 jobs:
   - job: Tests
     pool:
-      name: 00-OSIManaged-Test
-      demands: COMPUTERNAME -equals $(buildAgent)
+      name: OpsGuild-Containers-Staging
+      demands: Agent.Name -equals PowerBITest
     steps:
       - template: '/miscellaneous/build_templates/appsettings.yml@templates'
         parameters:

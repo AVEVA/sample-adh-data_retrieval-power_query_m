@@ -46,9 +46,7 @@ jobs:
           command: test
           publishTestResults: true
           testRunTitle: '$(Agent.JobName) on $(Agent.OS)'
-          workingDirectory: $(Build.SourcesDirectory)\ADHPowerQueryTest
-          timeoutInMinutes: 3
-
+          
   - job: Analysis
     pool:
       name: 00-OSIManaged-Test

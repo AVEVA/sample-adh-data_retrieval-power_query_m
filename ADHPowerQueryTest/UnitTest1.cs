@@ -152,7 +152,7 @@ namespace ADHPowerQueryTest
 
             if (!retry.Success)
             {
-                throw new Exception($"Timeout exceeded for function {getter.Method.Name}");
+                throw new Exception($"Timeout exceeded for function {getter}");
             }
 
             return retry.Result;

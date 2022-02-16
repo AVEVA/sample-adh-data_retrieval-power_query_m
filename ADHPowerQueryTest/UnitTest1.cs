@@ -59,7 +59,7 @@ namespace ADHPowerQueryTest
 
             using (var automation = new UIA3Automation())
             {
-                using (var app = FlaUI.Core.Application.Launch(@"F:\Program Files\Microsoft Power BI Desktop\bin\PBIDesktop.exe"))
+                using (var app = FlaUI.Core.Application.Launch(@"C:\Program Files\Microsoft Power BI Desktop\bin\PBIDesktop.exe"))
                 {
                     Thread.Sleep(10000);
 

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
+using System.Threading;
 using FlaUI.Core.AutomationElements;
 using FlaUI.Core.Definitions;
 using FlaUI.Core.Tools;
@@ -57,17 +59,19 @@ namespace ADHPowerQueryTest
 
             using (var automation = new UIA3Automation())
             {
-                using (var app = FlaUI.Core.Application.Launch(@"C:\Program Files\Microsoft Power BI Desktop\bin\PBIDesktop.exe"))
+                using (var app = FlaUI.Core.Application.Launch(@"F:\Program Files\Microsoft Power BI Desktop\bin\PBIDesktop.exe"))
                 {
+                    Thread.Sleep(10000);
+
                     app.CloseTimeout = new TimeSpan(0, 0, 0);
                     app.WaitWhileMainHandleIsMissing();
-                    var window = app.GetMainWindow(automation);
+                    var window = app.GetAllTopLevelWindows(automation).Where(w => w.AutomationId == "MainWindow").Single();
                     var desktop = window.Parent;
 
                     try
                     {
                         // Close the start window
-                        var startDialog = WaitForElement(() => window.FindFirstChild(cf => cf.ByAutomationId("KoStartDialog")));
+                        var startDialog = WaitForElement(() => window.FindFirstDescendant(cf => cf.ByAutomationId("KoStartDialog")));
                         var getDataButton = WaitForElement(() => startDialog.FindFirstDescendant(cf => cf.ByName("Get data"))?.AsButton());
                         getDataButton?.Invoke();
 
@@ -148,7 +152,7 @@ namespace ADHPowerQueryTest
 
             if (!retry.Success)
             {
-                throw new Exception($"Timeout exceeded for function {getter}");
+                throw new Exception($"Timeout exceeded for function {getter.Method.Name}");
             }
 
             return retry.Result;

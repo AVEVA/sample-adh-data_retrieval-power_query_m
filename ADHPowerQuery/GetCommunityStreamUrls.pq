@@ -63,8 +63,6 @@
         // PI Cloud REST API query - window
         dataQuery = "/api/"
             &apiVersion&
-            "/Tenants/"
-            &tenantId&
             "/Search/Communities/"
             &communityId&
             "/Streams?query="     

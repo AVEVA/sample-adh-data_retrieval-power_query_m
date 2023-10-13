@@ -1,6 +1,6 @@
 # ADH Power Query M Data Retrieval Sample
 
-**Version:** 1.2.1
+**Version:** 1.2.2
 
 [![Build Status](https://dev.azure.com/osieng/engineering/_apis/build/status/product-readiness/ADH/aveva.sample-adh-data_retrieval-power_query_m?branchName=main)](https://dev.azure.com/osieng/engineering/_build/latest?definitionId=3963&branchName=main)
 

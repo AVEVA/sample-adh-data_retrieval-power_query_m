@@ -21,12 +21,11 @@ resources:
   repositories:
     - repository: templates
       type: github
-      name: osisoft/OSI-Samples
-      endpoint: osisoft/OSI-Samples
+      name: AVEVA/AVEVA-Samples
+      endpoint: AVEVA
 
 
 variables:
-  - template: '/miscellaneous/build_templates/variables.yml@templates'
   - name: analysisProject
     value: OCS_DataRetrieval_PowerQuery
 

@@ -1,5 +1,9 @@
 # Version History
 
+## 1.2.2 / 2023-10-13
+
+- Migrate Pipelines
+
 ## 1.2.1 / 2022-05-23
 
 - Update communities queries to be compliant with changes made to the API

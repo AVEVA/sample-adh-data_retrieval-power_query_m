@@ -27,7 +27,7 @@ The sample code in this repository demonstrates how to connect to ADH and pull d
 1. Create all functions that will be used.
 1. Optionally create parameters for connection information like your Tenant Id by clicking **Manage Parameters** in the Parameters section of ribbon.
 1. Use functions in your queries. See the [Using Functions](#using-functions) section below for more information.
-1. You may encouter the prompt to "Please specify how to connect.". If this occurs, click **Edit Credentials**, select **Anonymous**, and click **Connect**.
+1. You may encounter the prompt to "Please specify how to connect." If this occurs, click **Edit Credentials**, select **Anonymous**, and click **Connect**.
 
 Note: It is not recommended to hard code the app settings directly in the power query scripts as this could pose a security risk.
 
@@ -43,7 +43,7 @@ Note: It is not recommended to hard code the app settings directly in the power 
 1. Create all functions that will be used.
 1. Optionally create parameters for connection information like your Tenant Id by clicking **Manage Parameters** in the Parameters section of ribbon.
 1. Use functions in your queries. See the [Using Functions](#using-functions) section below for more information.
-1. You may encouter the prompt to "Please specify how to connect.". If this occurs, click **Edit Credentials**, select **Anonymous**, and click **Connect**.
+1. You may encounter the prompt to "Please specify how to connect." If this occurs, click **Edit Credentials**, select **Anonymous**, and click **Connect**.
 
 Note: It is not recommended to hard code the app settings directly in the power query scripts as this could pose a security risk.
 
@@ -91,7 +91,7 @@ in
 
 ## Using the Results
 
-After you have made a query you should be left with a result that looks something like this:
+After you have made a query, you should be left with a result that looks something like this:
 
 ![Power Query Editor Result](images/Power%20Query%20Editor%20Result.png)
 
@@ -118,7 +118,7 @@ At this point, the data should be consumable in a Power BI Dashboard or Excel Wo
 
 ## Running Tests
 
-1. Open Visual Studio Code whith the Power Query SDK installed.
+1. Open Visual Studio Code with the Power Query SDK installed.
 1. Open the sample folder.
 1. Rename [appsettings.placeholder.json](appsettings.placeholder.json) file to `appsettings.json`.
 1. Replace the placeholders in the `appsettings.json` file with your connection information and resources (Streams, Assets, etc.).

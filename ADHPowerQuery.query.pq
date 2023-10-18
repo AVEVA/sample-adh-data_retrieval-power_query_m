@@ -1,4 +1,4 @@
-section ADHPowerQuerUnitTests;
+section ADHPowerQueryUnitTests;
 
 shared MyExtension.UnitTest = [
     facts = {
@@ -17,7 +17,7 @@ shared MyExtension.UnitTest = [
 
 CheckReturnsTable = (test) =>
     let
-        result = try ADHPowerQuer.Contents(){[Name=test]}[Data],
+        result = try ADHPowerQuery.Contents(){[Name=test]}[Data],
         safeResult = if result[HasError] then result[Error] else Value.Is(result[Value], type table)
     in
         safeResult;

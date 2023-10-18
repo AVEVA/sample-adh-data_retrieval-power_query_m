@@ -1,4 +1,4 @@
-section ADHPowerQuer;
+section ADHPowerQuery;
 
 Extension.LoadFunction = (name as text) =>
     let
@@ -190,16 +190,16 @@ CreateNavTable = () =>
     in
         NavTable;
 
-[DataSource.Kind = "ADHPowerQuer", Publish = "ADHPowerQuer.Publish"]
-shared ADHPowerQuer.Contents = CreateNavTable;
+[DataSource.Kind = "ADHPowerQuery", Publish = "ADHPowerQuery.Publish"]
+shared ADHPowerQuery.Contents = CreateNavTable;
 
-ADHPowerQuer = [
+ADHPowerQuery = [
     Authentication = [
         Anonymous = []
     ]
 ];
 
-ADHPowerQuer.Publish = [
+ADHPowerQuery.Publish = [
     Beta = true,
     Category = "Other",
     ButtonText = {"Data Hub sample", "Data Hub sample"}

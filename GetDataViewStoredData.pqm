@@ -1,0 +1,167 @@
+﻿let
+    GetDataViewStoredData = (
+        token as text,
+        resource as text,
+        apiVersion as text,
+        tenantId as text,
+        namespaceId as text,
+        dataViewId as text,
+        startIndex as datetime,
+        endIndex as datetime
+    ) as table =>
+        let
+            GetContinuation = (response) as nullable text =>
+                let
+                    headers = Value.Metadata(response)[Headers],
+                    nextPageLink = Record.FieldOrDefault(headers, "Next-Page"),
+                    continuationToken =
+                        if nextPageLink = null then
+                            null
+                        else
+                            List.Last(Text.Split(nextPageLink, "continuationtoken="))
+                in
+                    continuationToken,
+            GetPage = (continuation as nullable text) as table =>
+                let
+                    dataQuery = "/api/"
+                        & apiVersion
+                        & "/Tenants/"
+                        & tenantId
+                        & "/Namespaces/"
+                        & namespaceId
+                        & "/Dataviews/"
+                        & dataViewId
+                        & "/Data/Stored?startIndex="
+                        & DateTime.ToText(startIndex, "o")
+                        & "&endIndex="
+                        & DateTime.ToText(endIndex, "o"),
+                    queryWithContinuation =
+                        if continuation = null then
+                            dataQuery
+                        else
+                            dataQuery & "&continuationToken=" & continuation,
+                    response = Web.Contents(
+                        resource, [
+                            RelativePath = queryWithContinuation,
+                            Headers = [Authorization = token]
+                        ]
+                    ),
+                    newContinuation = GetContinuation(response),
+                    getJsonQuery = Json.Document(response),
+                    tableOfData = Table.FromList(
+                        getJsonQuery, Splitter.SplitByNothing(), null, null, ExtraValues.Error
+                    )
+                in
+                    tableOfData meta [Continuation = newContinuation],
+            // The getNextPage function takes a single argument and is expected to return a nullable table
+            Table.GenerateByPage = (getNextPage as function) as table =>
+                let
+                    listOfPages = List.Generate(
+                        () => getNextPage(null),
+                        // get the first page of data
+                        (lastPage) => lastPage <> null,
+                        // stop when the function returns null
+                        (lastPage) => getNextPage(lastPage)
+                        // pass the previous page to the next function call
+                    ),
+                    // concatenate the pages together
+                    tableOfPages = Table.FromList(listOfPages, Splitter.SplitByNothing(), {"Column1"}),
+                    firstRow = tableOfPages{0} ?
+                in
+                    // if we didn't get back any pages of data, return an empty table
+                    // otherwise set the table type based on the columns of the first page
+                    if (firstRow = null) then
+                        Table.FromRows({})
+                        // check for empty first table
+                    else if (Table.IsEmpty(firstRow[Column1])) then
+                        firstRow[Column1]
+                    else
+                        Value.ReplaceType(
+                            Table.ExpandTableColumn(tableOfPages, "Column1", Table.ColumnNames(firstRow[Column1])),
+                            Value.Type(firstRow[Column1])
+                        ),
+            // Read all pages of data.
+            // After every page, we check the "NextLink" record on the metadata of the previous request.
+            // Table.GenerateByPage will keep asking for more pages until we return null.
+            GetAllPagesByNextLink = Table.GenerateByPage(
+                (previous) =>
+                    let
+                        // if previous is null, then this is our first page of data
+                        continuation = if (previous = null) then "" else Value.Metadata(previous)[Continuation]?,
+                        // if continuation was set to null by the previous call, we know we have no more data
+                        page = if (continuation <> null) then GetPage(continuation) else null
+                    in
+                        page
+            )
+        in
+            GetAllPagesByNextLink,
+    GetDataViewStoredDataType = type function (
+        token as (
+            type text meta [
+                Documentation.FieldCaption = "Token",
+                Documentation.FieldDescription = "OAuth bearer token. Generate using GetToken.",
+                Documentation.SampleValues = {"Generate using GetToken()"}
+            ]
+        ),
+        resource as (
+            type text meta [
+                Documentation.FieldCaption = "Resource",
+                Documentation.FieldDescription = "Region Endpoint.",
+                Documentation.SampleValues = {"https://uswe.datahub.connect.aveva.com"}
+            ]
+        ),
+        apiVersion as (
+            type text meta [
+                Documentation.FieldCaption = "API Version",
+                Documentation.FieldDescription = "API Version.",
+                Documentation.SampleValues = {"v1"}
+            ]
+        ),
+        tenantId as (
+            type text meta [
+                Documentation.FieldCaption = "Tenant Id",
+                Documentation.FieldDescription = "Tenant Identifier.",
+                Documentation.SampleValues = {"Enter Tenant Id"}
+            ]
+        ),
+        namespaceId as (
+            type text meta [
+                Documentation.FieldCaption = "Namespace Id",
+                Documentation.FieldDescription = "Namespace Identifier.",
+                Documentation.SampleValues = {"Enter Namespace Id"}
+            ]
+        ),
+        assetId as (
+            type text meta [
+                Documentation.FieldCaption = "Data View Id",
+                Documentation.FieldDescription = "Data View Identifier.",
+                Documentation.SampleValues = {"Enter Data View Id"}
+            ]
+        ),
+        startIndex as (
+            type datetime meta [
+                Documentation.FieldCaption = "Start Index",
+                Documentation.FieldDescription = "Index identifying the beginning of the series of events to return."
+            ]
+        ),
+        endIndex as (
+            type datetime meta [
+                Documentation.FieldCaption = "End Index",
+                Documentation.FieldDescription = "Index identifying the end of the series of events to return."
+            ]
+        )
+    ) as binary meta [
+        Documentation.Name = "Get Data View Stored Data",
+        Documentation.LongDescription = "Returns stored data for the provided Data View and index parameters.
+            <br>
+            <br> &nbsp &nbsp <b>Token</b>: OAuth bearer token. Generate using GetToken().
+            <br> &nbsp &nbsp <b>Resource</b>: Region Endpoint.
+            <br> &nbsp &nbsp <b>API Version</b>: API Version.
+            <br> &nbsp &nbsp <b>Tenant Id</b>: Tenant Identifier.
+            <br> &nbsp &nbsp <b>Namespace Id</b>: Namespace Identifier.
+            <br> &nbsp &nbsp <b>Data View Id</b>: Data View Identifier.
+            <br> &nbsp &nbsp <b>Start Index</b>: Index identifying the beginning of the series of events to return.
+            <br> &nbsp &nbsp <b>End Index</b>: Index identifying the end of the series of events to return."
+    ]
+in
+    Value.ReplaceType(GetDataViewStoredData, GetDataViewStoredDataType)

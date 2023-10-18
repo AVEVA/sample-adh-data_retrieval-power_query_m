@@ -1,0 +1,150 @@
+let
+    GraphQLQuery = (
+        token as text, resource as text, apiVersion as text, tenantId as text, namespaceId as text, query as text
+    ) as table =>
+        let
+            GetContinuation = (response) as nullable text =>
+                Record.FieldOrDefault(Record.FieldOrDefault(response, "extensions"), "continuation"),
+            GraphQLPage = (continuation as nullable text) as table =>
+                let
+                    graphqlQuery = "/api/"
+                        & apiVersion
+                        & "/Tenants/"
+                        & tenantId
+                        & "/Namespaces/"
+                        & namespaceId
+                        & "/graphql",
+                    graphqlQueryPreview = Text.Replace(graphqlQuery, "/api/v1/", "/api/v1-preview/"),
+                    queryWithContinuation =
+                        if continuation = null then
+                            graphqlQueryPreview
+                        else
+                            graphqlQueryPreview & "?continuation=" & continuation,
+                    formattedQuery = "{""query"": """
+                        & Text.Replace(Text.Replace(query, "#(lf)", "\r\n"), """", "\""")
+                        & """, ""variables"":{}}",
+                    getJsonQuery = Json.Document(
+                        Web.Contents(
+                            resource,
+                            [
+                                RelativePath = queryWithContinuation,
+                                Headers = [
+                                    #"Method" = "POST",
+                                    #"Content-Type" = "application/json",
+                                    Authorization = token
+                                ],
+                                Content = Text.ToBinary(formattedQuery)
+                            ]
+                        )
+                    ),
+                    newContinuation = GetContinuation(getJsonQuery),
+                    data = Record.FieldOrDefault(getJsonQuery, "data"),
+                    tableOfData = Record.ToTable(data),
+                    expandedTableOfData = Table.ExpandRecordColumn(
+                        tableOfData,
+                        "Value",
+                        {"assets", "referenceData", "events"},
+                        {"assets", "referenceData", "events"}
+                    )
+                in
+                    tableOfData meta [Continuation = newContinuation],
+            // The getNextPage function takes a single argument and is expected to return a nullable table
+            Table.GenerateByPage = (getNextPage as function) as table =>
+                let
+                    listOfPages = List.Generate(
+                        () => getNextPage(null),
+                        // get the first page of data
+                        (lastPage) => lastPage <> null,
+                        // stop when the function returns null
+                        (lastPage) => getNextPage(lastPage)
+                        // pass the previous page to the next function call
+                    ),
+                    // concatenate the pages together
+                    tableOfPages = Table.FromList(listOfPages, Splitter.SplitByNothing(), {"Column1"}),
+                    firstRow = tableOfPages{0} ?
+                in
+                    // if we didn't get back any pages of data, return an empty table
+                    // otherwise set the table type based on the columns of the first page
+                    if (firstRow = null) then
+                        Table.FromRows({})
+                        // check for empty first table
+                    else if (Table.IsEmpty(firstRow[Column1])) then
+                        firstRow[Column1]
+                    else
+                        Value.ReplaceType(
+                            Table.ExpandTableColumn(tableOfPages, "Column1", Table.ColumnNames(firstRow[Column1])),
+                            Value.Type(firstRow[Column1])
+                        ),
+            // Read all pages of data.
+            // After every page, we check the "NextLink" record on the metadata of the previous request.
+            // Table.GenerateByPage will keep asking for more pages until we return null.
+            GetAllPagesByNextLink = Table.GenerateByPage(
+                (previous) =>
+                    let
+                        // if previous is null, then this is our first page of data
+                        continuation = if (previous = null) then "" else Value.Metadata(previous)[Continuation]?,
+                        // if continuation was set to null by the previous call, we know we have no more data
+                        page = if (continuation <> null) then GraphQLPage(continuation) else null
+                    in
+                        page
+            )
+        in
+            GetAllPagesByNextLink,
+    GraphQLQueryType = type function (
+        token as (
+            type text meta [
+                Documentation.FieldCaption = "Token",
+                Documentation.FieldDescription = "OAuth bearer token. Generate using GetToken.",
+                Documentation.SampleValues = {"Generate using GetToken()"}
+            ]
+        ),
+        resource as (
+            type text meta [
+                Documentation.FieldCaption = "Resource",
+                Documentation.FieldDescription = "Region Endpoint.",
+                Documentation.SampleValues = {"https://uswe.datahub.connect.aveva.com"}
+            ]
+        ),
+        apiVersion as (
+            type text meta [
+                Documentation.FieldCaption = "API Version",
+                Documentation.FieldDescription = "API Version.",
+                Documentation.SampleValues = {"v1"}
+            ]
+        ),
+        tenantId as (
+            type text meta [
+                Documentation.FieldCaption = "Tenant Id",
+                Documentation.FieldDescription = "Tenant Identifier.",
+                Documentation.SampleValues = {"Enter Tenant Id"}
+            ]
+        ),
+        namespaceId as (
+            type text meta [
+                Documentation.FieldCaption = "Namespace Id",
+                Documentation.FieldDescription = "Namespace Identifier.",
+                Documentation.SampleValues = {"Enter Namespace Id"}
+            ]
+        ),
+        query as (
+            type text meta [
+                Documentation.FieldCaption = "Query",
+                Documentation.FieldDescription = "Graph QL Query.",
+                Documentation.SampleValues = {"{}"},
+                Formatting.IsMultiLine = true,
+                Formatting.IsCode = false
+            ]
+        )
+    ) as binary meta [
+        Documentation.Name = "Graph QL Query",
+        Documentation.LongDescription = "Submit a GraphQL query to AVEVA Data Hub.
+            <br>
+            <br> &nbsp &nbsp <b>Token</b>: OAuth bearer token. Generate using GetToken().
+            <br> &nbsp &nbsp <b>Resource</b>: Region Endpoint.
+            <br> &nbsp &nbsp <b>API Version</b>: API Version.
+            <br> &nbsp &nbsp <b>Tenant Id</b>: Tenant Identifier.
+            <br> &nbsp &nbsp <b>Namespace Id</b>: Namespace Identifier.
+            <br> &nbsp &nbsp <b>Query</b>: Graph QL Query."
+    ]
+in
+    Value.ReplaceType(GraphQLQuery, GraphQLQueryType)

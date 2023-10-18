@@ -1,0 +1,104 @@
+let
+    GetStreamWindowData = (
+        token as text,
+        resource as text,
+        apiVersion as text,
+        tenantId as text,
+        namespaceId as text,
+        streamId as text,
+        startIndex as datetime,
+        endIndex as datetime
+    ) as table =>
+        let
+            // construct Stream data query
+            dataQuery = "/api/"
+                & apiVersion
+                & "/Tenants/"
+                & tenantId
+                & "/Namespaces/"
+                & namespaceId
+                & "/Streams/"
+                & streamId
+                & "/Data?startIndex="
+                & DateTime.ToText(startIndex, "o")
+                & "&endIndex="
+                & DateTime.ToText(endIndex, "o"),
+            getJsonQuery = Json.Document(
+                Web.Contents(resource, [
+                    RelativePath = dataQuery,
+                    Headers = [Authorization = token]
+                ])
+            ),
+            tableOfData = Table.FromList(getJsonQuery, Splitter.SplitByNothing(), null, null, ExtraValues.Error)
+        in
+            tableOfData,
+    GetStreamWindowDataType = type function (
+        token as (
+            type text meta [
+                Documentation.FieldCaption = "Token",
+                Documentation.FieldDescription = "OAuth bearer token. Generate using GetToken.",
+                Documentation.SampleValues = {"Generate using GetToken()"}
+            ]
+        ),
+        resource as (
+            type text meta [
+                Documentation.FieldCaption = "Resource",
+                Documentation.FieldDescription = "Region Endpoint.",
+                Documentation.SampleValues = {"https://uswe.datahub.connect.aveva.com"}
+            ]
+        ),
+        apiVersion as (
+            type text meta [
+                Documentation.FieldCaption = "API Version",
+                Documentation.FieldDescription = "API Version.",
+                Documentation.SampleValues = {"v1"}
+            ]
+        ),
+        tenantId as (
+            type text meta [
+                Documentation.FieldCaption = "Tenant Id",
+                Documentation.FieldDescription = "Tenant Identifier.",
+                Documentation.SampleValues = {"Enter Tenant Id"}
+            ]
+        ),
+        namespaceId as (
+            type text meta [
+                Documentation.FieldCaption = "Namespace Id",
+                Documentation.FieldDescription = "Namespace Identifier.",
+                Documentation.SampleValues = {"Enter Namespace Id"}
+            ]
+        ),
+        streamId as (
+            type text meta [
+                Documentation.FieldCaption = "Stream Id",
+                Documentation.FieldDescription = "Stream Identifier.",
+                Documentation.SampleValues = {"Enter Stream Id"}
+            ]
+        ),
+        startIndex as (
+            type datetime meta [
+                Documentation.FieldCaption = "Start Index",
+                Documentation.FieldDescription = "Index identifying the beginning of the series of events to return."
+            ]
+        ),
+        endIndex as (
+            type datetime meta [
+                Documentation.FieldCaption = "End Index",
+                Documentation.FieldDescription = "Index identifying the end of the series of events to return."
+            ]
+        )
+    ) as binary meta [
+        Documentation.Name = "Get Stream Window Data",
+        Documentation.LongDescription = "Returns a collection of stored values based on request parameters.
+            <br>
+            <br> &nbsp &nbsp <b>Token</b>: OAuth bearer token. Generate using GetToken().
+            <br> &nbsp &nbsp <b>Resource</b>: Region Endpoint.
+            <br> &nbsp &nbsp <b>API Version</b>: API Version.
+            <br> &nbsp &nbsp <b>Tenant Id</b>: Tenant Identifier.
+            <br> &nbsp &nbsp <b>Namespace Id</b>: Namespace Identifier.
+            <br> &nbsp &nbsp <b>Stream Id</b>: Stream Identifier.
+            <br> &nbsp &nbsp <b>Start Index</b>: Index identifying the beginning of the series of events to return.
+            <br> &nbsp &nbsp <b>End Index</b>: Index identifying the end of the series of events to return."
+    ]
+in
+    Value.ReplaceType(GetStreamWindowData, GetStreamWindowDataType)

@@ -42,13 +42,16 @@ jobs:
         inputs:
           script: |
             echo Downloading and extracting power query tools
+            mkdir pqsdktools
+            cd pqsdktools
             curl https://www.nuget.org/api/v2/package/Microsoft.PowerQuery.SdkTools -L --output PQSDKTools.npkg
             tar -xf PQSDKTools.npkg
+            cd ..
             echo Compiling extension
-            tools\MakePQX.exe compile
+            pqsdktools\tools\MakePQX.exe compile
             echo Setting credentials
             echo {"AuthenticationKind": "Anonymous"} > cred.json
-            tools\PQTest.exe set-credential --extension "bin\AnyCPU\Debug\s.mez" --queryFile "ADHPowerQuery.query.pq" --prettyPrint < cred.json
+            pqsdktools\tools\PQTest.exe set-credential --extension "bin\AnyCPU\Debug\s.mez" --queryFile "ADHPowerQuery.query.pq" --prettyPrint < cred.json
             echo Running unit tests
-            tools\PQTest.exe run-test --extension "bin\AnyCPU\Debug\s.mez" --queryFile "ADHPowerQuery.query.pq" --prettyPrint
+            pqsdktools\tools\PQTest.exe run-test --extension "bin\AnyCPU\Debug\s.mez" --queryFile "ADHPowerQuery.query.pq" --prettyPrint
             

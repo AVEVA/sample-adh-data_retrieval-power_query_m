@@ -44,6 +44,6 @@ jobs:
             curl https://www.nuget.org/api/v2/package/Microsoft.PowerQuery.SdkTools -L --output PQSDKTools.npkg
             tar -xf PQSDKTools.npkg
             tools\MakePQX.exe compile
-            tools\PQTest.exe set-credential --extension "bin\AnyCPU\Debug\sample-adh-data_retrieval-power_query_m.mez" --queryFile "ADHPowerQuery.query.pq" --prettyPrint
+            echo {"AuthenticationKind":"Anonymous"} > tools\PQTest.exe set-credential --extension "bin\AnyCPU\Debug\sample-adh-data_retrieval-power_query_m.mez" --queryFile "ADHPowerQuery.query.pq" --prettyPrint
             tools\PQTest.exe run-test --extension "bin\AnyCPU\Debug\sample-adh-data_retrieval-power_query_m.mez" --queryFile "ADHPowerQuery.query.pq" --prettyPrint
             

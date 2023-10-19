@@ -24,7 +24,6 @@ resources:
       name: AVEVA/AVEVA-Samples
       endpoint: AVEVA
 
-
 variables:
   - name: analysisProject
     value: OCS_DataRetrieval_PowerQuery
@@ -32,35 +31,19 @@ variables:
 jobs:
   - job: Tests
     pool:
-      name: 00-OSIManaged-Test
-      demands: COMPUTERNAME -equals $(buildAgent)
+      name: DevOps Managed Containers Build
+      demands: Agent.OS -equals Windows_NT
     steps:
       - template: '/miscellaneous/build_templates/appsettings.yml@templates'
         parameters:
           secrets: 'TenantId, CommunityId, ClientId, ClientSecret, Resource'
-        
-      - task: DotNetCoreCLI@2
-        displayName: 'Run tests'
+      
+      - task: CmdLine@2
         inputs:
-          command: test
-          publishTestResults: true
-          testRunTitle: '$(Agent.JobName) on $(Agent.OS)'
-          workingDirectory: $(Build.SourcesDirectory)\ADHPowerQueryTest
-          timeoutInMinutes: 3
-
-  - job: Analysis
-    pool:
-      name: 00-OSIManaged-Test
-      demands: COMPUTERNAME -equals $(buildAgent)
-
-    steps:
-      - template: '/miscellaneous/build_templates/appsettings.yml@templates'
-
-      - task: DotNetCoreCLI@2
-        displayName: 'Build'
-        inputs:
-          command: build
-
-      - template: '/miscellaneous/build_templates/binskim.yml@templates'
-
-      - template: '/miscellaneous/build_templates/analysis.yml@templates'
+          script: |
+            curl https://www.nuget.org/api/v2/package/Microsoft.PowerQuery.SdkTools -L --output PQSDKTools.npkg
+            tar -xf PQSDKTools.npkg
+            tools\MakePQX.exe compile
+            tools\PQTest.exe set-credential --extension "bin\AnyCPU\Debug\sample-adh-data_retrieval-power_query_m.mez" --queryFile "ADHPowerQuery.query.pq" --prettyPrint
+            tools\PQTest.exe run-test --extension "bin\AnyCPU\Debug\sample-adh-data_retrieval-power_query_m.mez" --queryFile "ADHPowerQuery.query.pq" --prettyPrint
+            

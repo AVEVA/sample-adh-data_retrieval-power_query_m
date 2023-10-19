@@ -45,6 +45,6 @@ jobs:
             tar -xf PQSDKTools.npkg
             tools\MakePQX.exe compile
             echo {"AuthenticationKind": "Anonymous"} > cred.json
-            tools\PQTest.exe set-credential --extension "bin\AnyCPU\Debug\sample-adh-data_retrieval-power_query_m.mez" --queryFile "ADHPowerQuery.query.pq" --prettyPrint < cred.json
-            tools\PQTest.exe run-test --extension "bin\AnyCPU\Debug\sample-adh-data_retrieval-power_query_m.mez" --queryFile "ADHPowerQuery.query.pq" --prettyPrint
+            tools\PQTest.exe set-credential --extension "bin\AnyCPU\Debug\s.mez" --queryFile "ADHPowerQuery.query.pq" --prettyPrint < cred.json
+            tools\PQTest.exe run-test --extension "bin\AnyCPU\Debug\s.mez" --queryFile "ADHPowerQuery.query.pq" --prettyPrint
             

@@ -5,12 +5,14 @@
             authUrl = "/identity/connect/token",
             // Construct message for authentication
             escapedClientSecret = Uri.EscapeDataString(clientSecret),
-            authPOSTBody = "client_id="
-                & clientId
-                & "&client_secret="
-                & escapedClientSecret
-                & "&grant_type=client_credentials",
-            authPOSTBodyBinary = Text.ToBinary(authPOSTBody),
+            authPOSTBody = []
+            & [
+                grant_type = "client_credentials",
+                client_id = clientId,
+                scope = "ocsapi",
+                client_secret = clientSecret
+            ],
+            authPOSTBodyBinary = Text.ToBinary(Uri.BuildQueryString(authPOSTBody)),
             // Authenticate
             GetJson =
                 try

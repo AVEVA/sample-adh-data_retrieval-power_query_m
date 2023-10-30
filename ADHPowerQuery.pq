@@ -74,8 +74,8 @@ CreateNavTable = () =>
                         tenantId,
                         namespaceId,
                         streamId,
-                        #datetime(2023, 5, 28, 0, 0, 0),
-                        #datetime(2023, 5, 29, 0, 0, 0)
+                        #datetime(2020, 3, 10, 0, 0, 0),
+                        #datetime(2020, 3, 11, 0, 0, 0)
                     ),
                     "Table",
                     "Table",
@@ -104,8 +104,8 @@ CreateNavTable = () =>
                         tenantId,
                         namespaceId,
                         assetId,
-                        #datetime(2023, 5, 28, 0, 0, 0),
-                        #datetime(2023, 5, 29, 0, 0, 0)
+                        #datetime(2020, 3, 10, 0, 0, 0),
+                        #datetime(2020, 3, 11, 0, 0, 0)
                     ),
                     "Table",
                     "Table",
@@ -130,8 +130,8 @@ CreateNavTable = () =>
                         token,
                         communityStreamUrl,
                         communityId,
-                        #datetime(2020, 3, 1, 0, 0, 0),
-                        #datetime(2020, 3, 10, 0, 0, 0)
+                        #datetime(2020, 3, 10, 0, 0, 0),
+                        #datetime(2020, 3, 11, 0, 0, 0)
                     ),
                     "Table",
                     "Table",
@@ -146,8 +146,8 @@ CreateNavTable = () =>
                         tenantId,
                         namespaceId,
                         dataViewId,
-                        #datetime(2022, 3, 1, 0, 0, 0),
-                        #datetime(2022, 3, 10, 0, 0, 0),
+                        #datetime(2020, 3, 10, 0, 0, 0),
+                        #datetime(2020, 3, 11, 0, 0, 0),
                         #duration(0, 1, 0, 0)
                     ),
                     "Table",
@@ -163,8 +163,8 @@ CreateNavTable = () =>
                         tenantId,
                         namespaceId,
                         dataViewId,
-                        #datetime(2022, 3, 1, 0, 0, 0),
-                        #datetime(2022, 3, 10, 0, 0, 0)
+                        #datetime(2020, 3, 10, 0, 0, 0),
+                        #datetime(2020, 3, 11, 0, 0, 0)
                     ),
                     "Table",
                     "Table",

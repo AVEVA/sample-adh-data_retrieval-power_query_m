@@ -67,8 +67,9 @@ jobs:
         inputs:
           targetType: 'inline'
           script: |
-            $Results = Get-Content -Path results.json | ConvertFrom-Json
+            $Results = Get-Content -Path results.json
             $Results
+            $Results = $Results | ConvertFrom-Json
             if ($Results.Output[0].Details -eq "100% success rate") {
                 echo "Success"
                 exit 0

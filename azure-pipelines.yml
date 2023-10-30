@@ -33,10 +33,17 @@ jobs:
     pool:
       name: DevOps Managed Containers Build
       demands: Agent.OS -equals Windows_NT
+    variables:
+      - name: StreamId
+        value: "PI_PISRV01_100"
+      - name: AssetId
+        value: "bced70ea-e928-4423-a3bc-1326a91c4a51"
+      - name: DataViewId
+        value: "WindTurbineData"
     steps:
       - template: '/miscellaneous/build_templates/appsettings.yml@templates'
         parameters:
-          secrets: 'TenantId, CommunityId, NamespaceId, ClientId, ClientSecret, Resource'
+          secrets: 'TenantId, CommunityId, NamespaceId, ClientId, ClientSecret, Resource, CommunityStreamUrl'
       
       - task: CmdLine@2
         inputs:

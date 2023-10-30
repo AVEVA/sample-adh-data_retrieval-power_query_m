@@ -58,6 +58,7 @@ jobs:
         
       - task: PowerShell@2
         inputs:
+          targetType: 'inline'
           script: |
             $Results = Get-Content -Path results.json | ConvertFrom-Json
             if ($Results.Output[0].Details -eq "100% success rate") {

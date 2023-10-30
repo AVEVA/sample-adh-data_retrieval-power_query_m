@@ -33,10 +33,17 @@ jobs:
     pool:
       name: DevOps Managed Containers Build
       demands: Agent.OS -equals Windows_NT
+    variables:
+      - name: StreamId
+        value: "PI_PISRV01_100"
+      - name: AssetId
+        value: "bced70ea-e928-4423-a3bc-1326a91c4a51"
+      - name: DataViewId
+        value: "WindTurbineData"
     steps:
       - template: '/miscellaneous/build_templates/appsettings.yml@templates'
         parameters:
-          secrets: 'TenantId, CommunityId, NamespaceId, ClientId, ClientSecret, Resource'
+          secrets: 'TenantId, CommunityId, NamespaceId, ClientId, ClientSecret, Resource, CommunityStreamUrl'
       
       - task: CmdLine@2
         inputs:
@@ -53,5 +60,19 @@ jobs:
             echo {"AuthenticationKind": "Anonymous"} > cred.json
             pqsdktools\tools\PQTest.exe set-credential --extension "bin\AnyCPU\Debug\s.mez" --queryFile "ADHPowerQuery.query.pq" --prettyPrint < cred.json
             echo Running unit tests
-            pqsdktools\tools\PQTest.exe run-test --extension "bin\AnyCPU\Debug\s.mez" --queryFile "ADHPowerQuery.query.pq" --prettyPrint
-            
+            pqsdktools\tools\PQTest.exe run-test --extension "bin\AnyCPU\Debug\s.mez" --queryFile "ADHPowerQuery.query.pq" --prettyPrint > results.json
+        displayName: Run Tests
+        
+      - task: PowerShell@2
+        inputs:
+          targetType: 'inline'
+          script: |
+            $Results = Get-Content -Path results.json | ConvertFrom-Json
+            if ($Results.Output[0].Details -eq "100% success rate") {
+                echo "Success"
+                exit 0
+            } else {
+                echo "Failure"
+                exit 1
+            }
+        displayName: Check Results

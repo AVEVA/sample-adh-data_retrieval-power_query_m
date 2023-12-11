@@ -21,47 +21,60 @@ resources:
   repositories:
     - repository: templates
       type: github
-      name: osisoft/OSI-Samples
-      endpoint: osisoft/OSI-Samples
-
+      name: AVEVA/AVEVA-Samples
+      endpoint: AVEVA
 
 variables:
-  - template: '/miscellaneous/build_templates/variables.yml@templates'
   - name: analysisProject
     value: OCS_DataRetrieval_PowerQuery
 
 jobs:
   - job: Tests
     pool:
-      name: 00-OSIManaged-Test
-      demands: COMPUTERNAME -equals $(buildAgent)
+      name: DevOps Managed Containers Build
+      demands: Agent.OS -equals Windows_NT
+    variables:
+      - name: StreamId
+        value: "PI_PISRV01_100"
+      - name: AssetId
+        value: "bced70ea-e928-4423-a3bc-1326a91c4a51"
+      - name: DataViewId
+        value: "WindTurbineData"
     steps:
       - template: '/miscellaneous/build_templates/appsettings.yml@templates'
         parameters:
-          secrets: 'TenantId, CommunityId, ClientId, ClientSecret, Resource'
+          secrets: 'TenantId, CommunityId, NamespaceId, ClientId, ClientSecret, Resource, CommunityStreamUrl'
+      
+      - task: CmdLine@2
+        inputs:
+          script: |
+            echo Downloading and extracting power query tools
+            mkdir pqsdktools
+            cd pqsdktools
+            curl https://www.nuget.org/api/v2/package/Microsoft.PowerQuery.SdkTools -L --output PQSDKTools.npkg
+            tar -xf PQSDKTools.npkg
+            cd ..
+            echo Compiling extension
+            pqsdktools\tools\MakePQX.exe compile
+            echo Setting credentials
+            echo {"AuthenticationKind": "Anonymous"} > cred.json
+            pqsdktools\tools\PQTest.exe set-credential --extension "bin\AnyCPU\Debug\s.mez" --queryFile "ADHPowerQuery.query.pq" --prettyPrint < cred.json
+            echo Running unit tests
+            pqsdktools\tools\PQTest.exe run-test --extension "bin\AnyCPU\Debug\s.mez" --queryFile "ADHPowerQuery.query.pq" --prettyPrint > results.json
+        displayName: Run Tests
         
-      - task: DotNetCoreCLI@2
-        displayName: 'Run tests'
+      - task: PowerShell@2
         inputs:
-          command: test
-          publishTestResults: true
-          testRunTitle: '$(Agent.JobName) on $(Agent.OS)'
-          workingDirectory: $(Build.SourcesDirectory)\ADHPowerQueryTest
-          timeoutInMinutes: 3
-
-  - job: Analysis
-    pool:
-      name: 00-OSIManaged-Test
-      demands: COMPUTERNAME -equals $(buildAgent)
-
-    steps:
-      - template: '/miscellaneous/build_templates/appsettings.yml@templates'
-
-      - task: DotNetCoreCLI@2
-        displayName: 'Build'
-        inputs:
-          command: build
-
-      - template: '/miscellaneous/build_templates/binskim.yml@templates'
-
-      - template: '/miscellaneous/build_templates/analysis.yml@templates'
+          targetType: 'inline'
+          script: |
+            $Results = Get-Content -Path results.json
+            $Results
+            $Results = $Results | ConvertFrom-Json
+            if ($Results.Output[0].Details -eq "100% success rate") {
+                echo "Success"
+                exit 0
+            } else {
+                echo "Failure"
+                exit 1
+            }
+        displayName: Check Results

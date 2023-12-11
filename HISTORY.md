@@ -1,5 +1,16 @@
 # Version History
 
+## 2.0.0 / 2023-10-18
+
+- Migrating to use VS Code Power Query SDK
+- Restructuring of sample usage
+- Adding function documentation
+- Adding additional Power Query Functions
+
+## 1.2.2 / 2023-10-13
+
+- Migrate Pipelines
+
 ## 1.2.1 / 2022-05-23
 
 - Update communities queries to be compliant with changes made to the API

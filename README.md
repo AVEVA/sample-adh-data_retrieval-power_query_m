@@ -1,96 +1,129 @@
 # ADH Power Query M Data Retrieval Sample
 
-**Version:** 1.2.1
+**Version:** 2.0.0
 
-[![Build Status](https://dev.azure.com/osieng/engineering/_apis/build/status/product-readiness/ADH/aveva.sample-adh-data_retrieval-power_query_m?branchName=main)](https://dev.azure.com/osieng/engineering/_build/latest?definitionId=3963&branchName=main)
-
-Built with .NET 5.0
+Built with [Power Query SDK](https://marketplace.visualstudio.com/items?itemName=PowerQuery.vscode-powerquery-sdk) in [Visual Studio Code](https://code.visualstudio.com/)
 
 
-The sample code in this repository demonstrates how to connect to ADH and pull data from either Data Views or Assets using Power Query M. Power Query works with a variety of Microsoft products such as Analysis Services, Excel, and Power BI workbooks. For more information on Power Query M please refer to [Microsoft's documentation](https://docs.microsoft.com/en-us/powerquery-m/).
+The sample code in this repository demonstrates how to connect to ADH and pull data from Streams, Assets, and Data Views using Power Query M. Power Query works with a variety of Microsoft products such as Analysis Services, Excel, and Power BI workbooks. For more information on Power Query M please refer to [Microsoft's documentation](https://docs.microsoft.com/en-us/powerquery-m/).
 
 ## Requirements
 
-The sample is configured using the file [appsettings.placeholder.json](ClientCredentialFlow/appsettings.placeholder.json). Before editing, rename this file to `appsettings.json`. This repository's `.gitignore` rules should prevent the file from ever being checked in to any fork or branch, to ensure credentials are not compromised.
+- [Power BI Desktop](https://powerbi.microsoft.com/en-us/desktop/)
+- Register a [Client-Credentials Client](https://datahub.connect.aveva.com/clients) in your AVEVA Data Hub tenant and create a client secret to use in the configuration of this sample. ([Video Walkthrough](https://www.youtube.com/watch?v=JPWy0ZX9niU))
+  - __NOTE__: This sample only requires read access to resources (Streams, Assets, etc.) to run successfully
+  - It is strongly advised to not elevate the permissions of a client beyond what is necessary.
 
-Replace the placeholders in the `appsettings.json` file with your Tenant Id, Client Id and Client Secret, Namespace Id, the current Api Version, and Community Id if querying community data. Optionally, a default Asset, Asset Query, Community Query, Community Stream Url, Data View, start index, end index, and interval can be configured for queries.
+## Setting up Power BI
 
-## Running the Sample
+1. Open Power BI Desktop.
+1. Click the **Get data** button in the Data section of the ribbon.
+1. In the **Get Data** window search for "Blank Query".
+1. Select **Blank Query** and click the **Connect** button.
+1. Click the **Advanced Editor** button in the Query section of the ribbon in the **Power Query Editor**.
+1. Paste the query from the desired .pqm file. See the [Power Query Functions](#power-query-functions) section below for descriptions of each provided function.
+1. Click the **Done** button.
+1. Right click on the function and rename it to match the copied function.
+1. Create all functions that will be used.
+1. Optionally create parameters for connection information like your Tenant Id by clicking **Manage Parameters** in the Parameters section of ribbon.
+1. Use functions in your queries. See the [Using Functions](#using-functions) section below for more information.
+1. You may encounter the prompt to "Please specify how to connect." If this occurs, click **Edit Credentials**, select **Anonymous**, and click **Connect**.
 
-### Prerequisites
+Note: It is not recommended to hard code the app settings directly in the power query scripts as this could pose a security risk.
 
-- Register a Client Credential client in ADH.
-- Replace the placeholders in the `appsettings.json` as mentioned above.
-
-### Using Power BI
-
-1. Open Power BI Desktop
-1. Click the **Get data** button in the Data section of the ribbon
-1. In the **Get Data** window search for "Blank Query"
-1. Select **Blank Query** and click the **Connect** button
-1. Click the **Advanced Editor** button in the Query section of the ribbon in the **Power Query Editor**
-1. Paste the query from the desired .pq file. See the [Power Query Functions](#power-query-functions) section below for descriptions of each provided function
-1. Replace the "PATH_TO_CONFIG" placeholder with the path to your 'appsettings.json' file
-1. Click the **Done** button
-1. If the .pq file defines a function, fill out the parameters and click the **Invoke** button
-1. If GetDataView.pq is being used, the table that is generated will need to be expanded by clicking the expand column button on the **Column1** header
-1. Selecting the data type of each column may also be necessary. To do this automatically for all columns, select the **Transform** section of the ribbon, highlight all columns of your table, and click the **Detect Data Type** button in the ribbon under **Any Column**
-1. Click **Close & Apply** in the **Home** section of the ribbon
-
-Note: If you are using the Power BI service you will be unable to access the referenced appsettings.json file. Therefore, it will be necessary to modify the provided power query scripts to read the app settings from another source (e.g. [Azure Key Vault](https://docs.microsoft.com/en-us/azure/key-vault/)). It is not recommended to hard code the app settings directly in the power query scripts as this could pose a security risk.
-
-### Using Excel
+## Setting up Excel
 
 1. Open Excel
-1. Under the **Data** section of the ribbon, click the **Get Data** button
-1. In the dropdown drill down to **From Other Sources** and click **Blank Query**
-1. Click the **Advanced Editor** button in the Query section of the ribbon in the *Power Query Editor*
-1. Paste the query from the desired .pq file. See the [Power Query Functions](#power-query-functions) section below for descriptions of each provided function
-1. Replace the "PATH_TO_CONFIG" placeholder with the path to your 'appsettings.json' file
-1. Click the **Done** button
-1. If the .pq file defines a function, fill out the parameters and click the **Invoke** button
-1. If GetDataView.pq is being used, the table that is generated will need to be expanded by clicking the expand column button on the **Column1** header
-1. Selecting the data type of each column may also be necessary. To do this automatically for all columns, select the **Transform** section of the ribbon, highlight all columns of your table, and click the **Detect Data Type** button in the ribbon under **Any Column**
-1. Click **Close & Apply** in the **Home** section of the ribbon
+1. Under the **Data** section of the ribbon, click the **Get Data** button.
+1. In the dropdown drill down to **From Other Sources** and click **Blank Query**.
+1. Click the **Advanced Editor** button in the Query section of the ribbon in the *Power Query Editor*.
+1. Paste the query from the desired .pqm file. See the [Power Query Functions](#power-query-functions) section below for descriptions of each provided function.
+1. Click the **Done** button.
+1. Right click on the function and rename it to match the copied function.
+1. Create all functions that will be used.
+1. Optionally create parameters for connection information like your Tenant Id by clicking **Manage Parameters** in the Parameters section of ribbon.
+1. Use functions in your queries. See the [Using Functions](#using-functions) section below for more information.
+1. You may encounter the prompt to "Please specify how to connect." If this occurs, click **Edit Credentials**, select **Anonymous**, and click **Connect**.
+
+Note: It is not recommended to hard code the app settings directly in the power query scripts as this could pose a security risk.
+
+## Using Functions
+
+The provided functions can be chained together in your queries to meet your needs. Every function (besides GetToken) requires a token for authorization to resources so you will usually start by generating one using GetToken. This pattern can be seen in the following example:
+
+```C#
+let
+    token = GetToken(Resource, ClientId, ClientSecret),
+    data = GetStreamWindowData(token, Resource, ApiVersion, TenantId, NamespaceId, "SLTC.SensorUnit1.TMP117", #datetime(2023, 5, 28, 0, 0, 0), #datetime(2023, 5, 29, 0, 0, 0)),
+    expandedData = Table.ExpandRecordColumn(data, "Column1", {"Timestamp", "Temperature"}, {"Timestamp", "Temperature"})
+in
+    expandedData
+```
+
+The generated token can also be used for subsequent calls so long as it has not expired (tokens expire after 1 hour by default).
+
+Functions can also be chained together to accomplish more complex tasks like retrieving data from a set of streams returned by a query. An example of this can be seen below:
+
+```C#
+let
+    token = GetToken(Resource, ClientId, ClientSecret),
+    streams = GetStreams(token, Resource, ApiVersion, TenantId, NamespaceId, "SLTC.SensorUnit1.TMP117 OR SLTC.SensorUnit1.DPS310"),
+    streamIds = Table.ToList(Table.SelectColumns(streams,"Id")),
+    data = Table.Combine(
+        List.Transform(
+            streamIds, 
+            (streamId) => let 
+                result = Table.AddColumn(
+                    GetStreamWindowData(
+                        token, Resource, ApiVersion, TenantId, NamespaceId, streamId, #datetime(2023, 5, 28, 0, 0, 0), #datetime(2023, 5, 29, 0, 0, 0)
+                    ), 
+                    "StreamId", 
+                    each streamId
+                )
+            in
+                result
+        )
+    ),
+    expandedData = Table.ExpandRecordColumn(data, "Column1", {"Timestamp", "Temperature", "AtmosphericPressure"}, {"Timestamp", "Temperature", "AtmosphericPressure"})
+in
+    expandedData
+```
+
+## Using the Results
+
+After you have made a query, you should be left with a result that looks something like this:
+
+![Power Query Editor Result](images/Power%20Query%20Editor%20Result.png)
+
+To get the result in a format that is useable by Power BI you will need to expand the results. This can be done by clicking the expand icon ![Expand Icon](/images/Expand%20Icon.png) then clicking `Done` or `Expand to New Rows`. This may need to be repeated a few times to fully expand the results.
+
+Once the data is expanded, if necessary, right click on column headers and use the "Change Type" options to assign the proper types, as all fields are treated as strings by default.
+
+At this point, the data should be consumable in a Power BI Dashboard or Excel Workbook!
 
 ### Power Query Functions
 
-| Function                  | Description                                                                                                                                                                                                                                                                 |
-| ------------------------- | -----------                                                                                                                                                                                                                                                                 |
-| GetAsset.pq               | Retrieves the data of a single asset. Please note that this function assumes that the referenced streams have a 'Timestamp' and 'Value' property as is the case for PI to ADH streams.                                                                                      |
-| GetAssetIds.pq            | Retrieves a list of asset Ids based on a search query which can then be used to request data from each asset in the list.  Please note that this function assumes that the referenced streams have a 'Timestamp' and 'Value' property as is the case for PI to ADH streams. |
-| GetAssets.pq              | Uses the GetAssetIds function from above to request data from assets matching the specified query. Please note that this function assumes that the referenced streams have a 'Timestamp' and 'Value' property as is the case for PI to ADH streams.                         |
-| GetCommunityStream.pq     | Retrieves the data of a single community stream. Please note that this function assumes that the streams have a 'Timestamp' and 'Value' property as is the case for PI to ADH streams.                                                                                      |
-| GetCommunityStreamUrls.pq | Retrieves a list of community stream urls based on a search query which can then be used to request data from each stream in the list.  Please note that this function assumes that the have a 'Timestamp' and 'Value' property as is the case for PI to ADH streams.       |
-| GetCommunityStreams.pq    | Uses the GetCommunityStreamUrls function from above to request data from community streams matching the specified query. Please note that this function assumes that the streams have a 'Timestamp' and 'Value' property as is the case for PI to ADH streams.              |
-| GetDataView.pq            | Retrieves the data of a single Data View. Please note that this function makes calls for interpolated data. The query could be changed to retrieve stored values. In addition, the maximum page size to retrieve is set to the maximum of 250,000 by default.               |
-| GetToken.pq               | Returns a token for the provided client Id and client Secret. Each of the functions above uses this function and this function could be referenced in each instead of being copied. This function can also serve as a starting point for custom queries or troubleshooting. |
+| Function                         | Description                                                                                                                |
+| -------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| GetToken.pqm                     | Retrieves a token using Client Credentials OAuth flow. Each of the functions below need this function to generate a token. |
+| GetStreams.pqm                   | Retrieves Streams based on query.                                                                                          |
+| GetStreamWindowData.pqm          | Returns a collection of stored values from a Stream based on request parameters.                                           |
+| GetAssets.pqm                    | Retrieves Assets based on query.                                                                                           |
+| GetAssetWindowData.pqm           | Returns a collection of stored values from an Asset based on request parameters.                                           |
+| GetCommunityStreamSearch.pqm     | Retrieves Streams in a Community based on query.                                                                           |
+| GetCommunityStreamWindowData.pqm | Returns a collection of stored values from a Community Stream based on request parameters.                                 |
+| GetDataViewInterpolatedData.pqm  | Returns interpolated data for the provided Data View and index parameters.                                                 |
+| GetDataViewStoredData.pqm        | Returns stored data for the provided Data View and index parameters.                                                       |
+| GetGraphQLQuery.pqm              | Submit a GraphQL query to AVEVA Data Hub.                                                                                  |
 
-## Testing the Sample
+## Running Tests
 
-### Prerequisites for Testing
-
-- .NET 5.0 or later
-  - Note: Visual Studio 16.8 or later is required for development against .NET 5.0
-- To allow syntax highlighting and intellisense for .pq file in Visual Studio, the [Power Query SDK extension](https://marketplace.visualstudio.com/items?itemName=Dakahn.PowerQuerySDK) will need to be installed.
-- Replace the placeholders in the `appsettings.json` as mentioned above.
-- Disable M Intellisese in the advanced editor
-  1. Open the **Power Query Editor**
-  1. Click **File**
-  1. Click **Options and settings**
-  1. Click **Options**
-  1. Select **Power Query Editor**
-  1. Uncheck **Enable M Intellisese...**
-  1. Click **Ok**
-
-### Running the Tests
-
-1. Load the .csproj from the ADHPowerQueryTest directory above this in Visual Studio
-1. Rebuild project
-1. Open Test Explorer and make sure there are tests showing
-1. Run the tests
-
-Note: Do not touch your mouse or keyboard while the the tests are running since this could interfere with the automated process.
+1. Open Visual Studio Code with the Power Query SDK installed.
+1. Open the sample folder.
+1. Rename [appsettings.placeholder.json](appsettings.placeholder.json) file to `appsettings.json`.
+1. Replace the placeholders in the `appsettings.json` file with your connection information and resources (Streams, Assets, etc.).
+1. Set a credential. See [Microsoft's documentation](https://learn.microsoft.com/en-us/power-query/power-query-sdk-vs-code#set-credential) for more information.
+1. Evaluate `DataHubGraphQLConnector.query.pq`. See [Microsoft's documentation](https://learn.microsoft.com/en-us/power-query/power-query-sdk-vs-code#evaluate-a-query-and-the-results-panel) for more information.
 
 ---
 

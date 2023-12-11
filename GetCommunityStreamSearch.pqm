@@ -1,0 +1,93 @@
+﻿let
+    GetCommunityStreamSearch = (
+        token as text, resource as text, apiVersion as text, communityId as text, query as text
+    ) as table =>
+        let
+            // construct query for community streams
+            dataQuery = "/api/" & apiVersion & "/Search/Communities/" & communityId & "/Streams?query=" & query,
+            dataQueryPreview = Text.Replace(dataQuery, "/api/v1/", "/api/v1-preview/"),
+            getJsonQuery = Json.Document(
+                Web.Contents(resource, [
+                    RelativePath = dataQueryPreview,
+                    Headers = [
+                        Authorization = token
+                    ]
+                ])
+            ),
+            tableOfData = Table.FromList(getJsonQuery, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+            expandedTableOfData = Table.ExpandRecordColumn(
+                tableOfData,
+                "Column1",
+                {
+                    "Id",
+                    "Name",
+                    "TypeId",
+                    "Description",
+                    "Self",
+                    "TenantId",
+                    "TenantName",
+                    "NamespaceId",
+                    "CommunityId"
+                },
+                {
+                    "Id",
+                    "Name",
+                    "TypeId",
+                    "Description",
+                    "Self",
+                    "TenantId",
+                    "TenantName",
+                    "NamespaceId",
+                    "CommunityId"
+                }
+            )
+        in
+            expandedTableOfData,
+    GetCommunityStreamSearchType = type function (
+        token as (
+            type text meta [
+                Documentation.FieldCaption = "Token",
+                Documentation.FieldDescription = "OAuth bearer token. Generate using GetToken.",
+                Documentation.SampleValues = {"Generate using GetToken()"}
+            ]
+        ),
+        resource as (
+            type text meta [
+                Documentation.FieldCaption = "Resource",
+                Documentation.FieldDescription = "Region Endpoint.",
+                Documentation.SampleValues = {"https://uswe.datahub.connect.aveva.com"}
+            ]
+        ),
+        apiVersion as (
+            type text meta [
+                Documentation.FieldCaption = "API Version",
+                Documentation.FieldDescription = "API Version.",
+                Documentation.SampleValues = {"v1"}
+            ]
+        ),
+        communityId as (
+            type text meta [
+                Documentation.FieldCaption = "Community Id",
+                Documentation.FieldDescription = "CommunityIdentifier.",
+                Documentation.SampleValues = {"Enter Community Id"}
+            ]
+        ),
+        query as (
+            type text meta [
+                Documentation.FieldCaption = "Query",
+                Documentation.FieldDescription = "Parameter representing a Community Stream search.",
+                Documentation.SampleValues = {"*"}
+            ]
+        )
+    ) as binary meta [
+        Documentation.Name = "Get Community Stream Search",
+        Documentation.LongDescription = "Retrieves Streams in a Community based on query.
+            <br>
+            <br> &nbsp &nbsp <b>Token</b>: OAuth bearer token. Generate using GetToken().
+            <br> &nbsp &nbsp <b>Resource</b>: Region Endpoint.
+            <br> &nbsp &nbsp <b>API Version</b>: API Version.
+            <br> &nbsp &nbsp <b>Community Id</b>: Community Identifier.
+            <br> &nbsp &nbsp <b>Query</b>: Parameter representing a Community Stream search."
+    ]
+in
+    Value.ReplaceType(GetCommunityStreamSearch, GetCommunityStreamSearchType)

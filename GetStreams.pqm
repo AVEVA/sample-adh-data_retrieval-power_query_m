@@ -1,0 +1,94 @@
+let
+    GetStreams = (
+        token as text, resource as text, apiVersion as text, tenantId as text, namespaceId as text, query as text
+    ) as table =>
+        let
+            // construct query for community streams
+            dataQuery = "/api/"
+                & apiVersion
+                & "/Tenants/"
+                & tenantId
+                & "/Namespaces/"
+                & namespaceId
+                & "/Streams?query="
+                & query,
+            getJsonQuery = Json.Document(
+                Web.Contents(resource, [
+                    RelativePath = dataQuery,
+                    Headers = [
+                        Authorization = token
+                    ]
+                ])
+            ),
+            tableOfData = Table.FromList(getJsonQuery, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+            expandedTableOfData = Table.ExpandRecordColumn(
+                tableOfData,
+                "Column1",
+                {"Id", "Name", "Description", "TypeId", "CreatedDate", "ModifiedDate"},
+                {
+                    "Id",
+                    "Name",
+                    "Description",
+                    "TypeId",
+                    "CreatedDate",
+                    "ModifiedDate"
+                }
+            )
+        in
+            expandedTableOfData,
+    GetStreamsType = type function (
+        token as (
+            type text meta [
+                Documentation.FieldCaption = "Token",
+                Documentation.FieldDescription = "OAuth bearer token. Generate using GetToken.",
+                Documentation.SampleValues = {"Generate using GetToken()"}
+            ]
+        ),
+        resource as (
+            type text meta [
+                Documentation.FieldCaption = "Resource",
+                Documentation.FieldDescription = "Region Endpoint.",
+                Documentation.SampleValues = {"https://uswe.datahub.connect.aveva.com"}
+            ]
+        ),
+        apiVersion as (
+            type text meta [
+                Documentation.FieldCaption = "API Version",
+                Documentation.FieldDescription = "API Version.",
+                Documentation.SampleValues = {"v1"}
+            ]
+        ),
+        tenantId as (
+            type text meta [
+                Documentation.FieldCaption = "Tenant Id",
+                Documentation.FieldDescription = "Tenant Identifier.",
+                Documentation.SampleValues = {"Enter Tenant Id"}
+            ]
+        ),
+        namespaceId as (
+            type text meta [
+                Documentation.FieldCaption = "Namespace Id",
+                Documentation.FieldDescription = "Namespace Identifier.",
+                Documentation.SampleValues = {"Enter Namespace Id"}
+            ]
+        ),
+        query as (
+            type text meta [
+                Documentation.FieldCaption = "Query",
+                Documentation.FieldDescription = "Parameter representing a Stream search.",
+                Documentation.SampleValues = {"*"}
+            ]
+        )
+    ) as binary meta [
+        Documentation.Name = "Get Streams",
+        Documentation.LongDescription = "Retrieves Streams based on query.
+            <br>
+            <br> &nbsp &nbsp <b>Token</b>: OAuth bearer token. Generate using GetToken().
+            <br> &nbsp &nbsp <b>Resource</b>: Region Endpoint.
+            <br> &nbsp &nbsp <b>API Version</b>: API Version.
+            <br> &nbsp &nbsp <b>Tenant Id</b>: Tenant Identifier.
+            <br> &nbsp &nbsp <b>Namespace Id</b>: Namespace Identifier.
+            <br> &nbsp &nbsp <b>Query</b>: Parameter representing a Stream search."
+    ]
+in
+    Value.ReplaceType(GetStreams, GetStreamsType)

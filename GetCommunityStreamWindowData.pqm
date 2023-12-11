@@ -1,0 +1,74 @@
+﻿let
+    GetCommunityStreamWindowData = (
+        token as text, communityStreamUrl as text, communityId as text, startIndex as datetime, endIndex as datetime
+    ) as table =>
+        let
+            // construct community stream data query
+            resource = List.First(Text.Split(communityStreamUrl, "/api/")),
+            dataQuery = "/api/"
+                & List.Last(Text.Split(communityStreamUrl, "/api/"))
+                & "/Data?startIndex="
+                & DateTime.ToText(startIndex, "o")
+                & "&endIndex="
+                & DateTime.ToText(endIndex, "o"),
+            getJsonQuery = Json.Document(
+                Web.Contents(
+                    resource,
+                    [
+                        RelativePath = dataQuery,
+                        Headers = [
+                            Authorization = token,
+                            #"Community-Id" = communityId
+                        ]
+                    ]
+                )
+            ),
+            tableOfData = Table.FromList(getJsonQuery, Splitter.SplitByNothing(), null, null, ExtraValues.Error)
+        in
+            tableOfData,
+    GetCommunityStreamWindowDataType = type function (
+        token as (
+            type text meta [
+                Documentation.FieldCaption = "Token",
+                Documentation.FieldDescription = "OAuth bearer token. Generate using GetToken.",
+                Documentation.SampleValues = {"Generate using GetToken()"}
+            ]
+        ),
+        resource as (
+            type text meta [
+                Documentation.FieldCaption = "Community Stream Url",
+                Documentation.FieldDescription = "Community Stream Url.",
+                Documentation.SampleValues = {"Enter Community Stream Url"}
+            ]
+        ),
+        communityId as (
+            type text meta [
+                Documentation.FieldCaption = "Community Id",
+                Documentation.FieldDescription = "CommunityIdentifier.",
+                Documentation.SampleValues = {"Enter Community Id"}
+            ]
+        ),
+        startIndex as (
+            type datetime meta [
+                Documentation.FieldCaption = "Start Index",
+                Documentation.FieldDescription = "Index identifying the beginning of the series of events to return."
+            ]
+        ),
+        endIndex as (
+            type datetime meta [
+                Documentation.FieldCaption = "End Index",
+                Documentation.FieldDescription = "Index identifying the end of the series of events to return."
+            ]
+        )
+    ) as binary meta [
+        Documentation.Name = "Get Community Stream Window Data",
+        Documentation.LongDescription = "Returns a collection of stored values based on request parameters.
+            <br>
+            <br> &nbsp &nbsp <b>Token</b>: OAuth bearer token. Generate using GetToken().
+            <br> &nbsp &nbsp <b>Community Stream Url</b>: Community Stream Url.
+            <br> &nbsp &nbsp <b>Community Id</b>: Community Identifier.
+            <br> &nbsp &nbsp <b>Start Index</b>: Index identifying the beginning of the series of events to return.
+            <br> &nbsp &nbsp <b>End Index</b>: Index identifying the end of the series of events to return."
+    ]
+in
+    Value.ReplaceType(GetCommunityStreamWindowData, GetCommunityStreamWindowDataType)

@@ -1,0 +1,105 @@
+﻿let
+    GetAssets = (
+        token as text, resource as text, apiVersion as text, tenantId as text, namespaceId as text, query as text
+    ) as table =>
+        let
+            // Get Asset Ids query
+            dataQuery = "/api/"
+                & apiVersion
+                & "/Tenants/"
+                & tenantId
+                & "/Namespaces/"
+                & namespaceId
+                & "/Assets/?query="
+                & query,
+            GetJsonQuery = Json.Document(
+                Web.Contents(resource, [
+                    RelativePath = dataQuery,
+                    Headers = [Authorization = token]
+                ])
+            ),
+            tableOfAssets = Table.FromList(GetJsonQuery, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+            expandedTableOfAssets = Table.ExpandRecordColumn(
+                tableOfAssets,
+                "Column1",
+                {
+                    "Id",
+                    "AssetTypeId",
+                    "Name",
+                    "Description",
+                    "CreatedDate",
+                    "ModifiedDate",
+                    "StreamReferences",
+                    "Tags",
+                    "Metadata"
+                },
+                {
+                    "Id",
+                    "AssetTypeId",
+                    "Name",
+                    "Description",
+                    "CreatedDate",
+                    "ModifiedDate",
+                    "StreamReferences",
+                    "Tags",
+                    "Metadata"
+                }
+            )
+        in
+            expandedTableOfAssets,
+    GetAssetsType = type function (
+        token as (
+            type text meta [
+                Documentation.FieldCaption = "Token",
+                Documentation.FieldDescription = "OAuth bearer token. Generate using GetToken.",
+                Documentation.SampleValues = {"Generate using GetToken()"}
+            ]
+        ),
+        resource as (
+            type text meta [
+                Documentation.FieldCaption = "Resource",
+                Documentation.FieldDescription = "Region Endpoint.",
+                Documentation.SampleValues = {"https://uswe.datahub.connect.aveva.com"}
+            ]
+        ),
+        apiVersion as (
+            type text meta [
+                Documentation.FieldCaption = "API Version",
+                Documentation.FieldDescription = "API Version.",
+                Documentation.SampleValues = {"v1"}
+            ]
+        ),
+        tenantId as (
+            type text meta [
+                Documentation.FieldCaption = "Tenant Id",
+                Documentation.FieldDescription = "Tenant Identifier.",
+                Documentation.SampleValues = {"Enter Tenant Id"}
+            ]
+        ),
+        namespaceId as (
+            type text meta [
+                Documentation.FieldCaption = "Namespace Id",
+                Documentation.FieldDescription = "Namespace Identifier.",
+                Documentation.SampleValues = {"Enter Namespace Id"}
+            ]
+        ),
+        query as (
+            type text meta [
+                Documentation.FieldCaption = "Query",
+                Documentation.FieldDescription = "Parameter representing an Asset search.",
+                Documentation.SampleValues = {"*"}
+            ]
+        )
+    ) as binary meta [
+        Documentation.Name = "Get Assets",
+        Documentation.LongDescription = "Retrieves Assets based on query.
+            <br>
+            <br> &nbsp &nbsp <b>Token</b>: OAuth bearer token. Generate using GetToken().
+            <br> &nbsp &nbsp <b>Resource</b>: Region Endpoint.
+            <br> &nbsp &nbsp <b>API Version</b>: API Version.
+            <br> &nbsp &nbsp <b>Tenant Id</b>: Tenant Identifier.
+            <br> &nbsp &nbsp <b>Namespace Id</b>: Namespace Identifier.
+            <br> &nbsp &nbsp <b>Query</b>: Parameter representing an Asset search."
+    ]
+in
+    Value.ReplaceType(GetAssets, GetAssetsType)

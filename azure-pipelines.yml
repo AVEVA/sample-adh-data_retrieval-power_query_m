@@ -23,6 +23,7 @@ resources:
       type: github
       name: AVEVA/AVEVA-Samples
       endpoint: AVEVA
+      ref: refs/heads/cbardini-patch-1
 
 variables:
   - name: analysisProject

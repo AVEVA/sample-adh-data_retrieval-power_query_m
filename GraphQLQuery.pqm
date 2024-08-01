@@ -137,7 +137,7 @@ let
         )
     ) as binary meta [
         Documentation.Name = "Graph QL Query",
-        Documentation.LongDescription = "Submit a GraphQL query to AVEVA Data Hub.
+        Documentation.LongDescription = "Submit a GraphQL query to CONNECT data services.
             <br>
             <br> &nbsp &nbsp <b>Token</b>: OAuth bearer token. Generate using GetToken().
             <br> &nbsp &nbsp <b>Resource</b>: Region Endpoint.

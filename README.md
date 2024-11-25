@@ -36,10 +36,11 @@ Note: It is not recommended to hard code the app settings directly in the power 
 If you plan to publish your PowerBI dashboard to the cloud PowerBI service, you may run into an issue where you cannot refresh your Semantic Model and you'll see the error message **"This dataset includes a dynamic data source. Since dynamic data sources aren't refreshed in the Power BI service, this dataset won't be refreshed."** The problem is that when a published dataset is refreshed, Power BI does some static analysis on the code to determine what the data sources for the dataset are and whether the supplied credentials are correct. Unfortunately in some cases, such as when the definition of a data source depends on the parameters from a custom M function, that static analysis fails and therefore the dataset does not refresh. To determine whether your dynamic data source can be refreshed, open the Data source settings dialog in Power Query Editor, and then select Data sources in current file. In the window that appears, look for the warning message, **"Some data sources may not be listed because of hand-authored queries."** In order to work around this issue, you can edit the sample code to replace any usage of the **"resource"** variable within **Web.Contents()** with your data services resource url. 
 
 **For example:**
+```C#
 GetJson =
-                try
+    try
                     Web.Contents(
-                        **"https://euno.datahub.connect.aveva.com/"**,
+                        "https://euno.datahub.connect.aveva.com/",
                         [
                             RelativePath = authUrl,
                             Headers = [
@@ -50,6 +51,7 @@ GetJson =
                             Content = authPOSTBodyBinary
                         ]
                     ),
+```
 
 When configuring your scheduled refresh, you should turn on the **“Skip Test Connection”** option on the data source in the Power BI Service and the dataset will refresh even if the call to the CONNECT resource on its own, without the dynamically added client credentials, would result in an error.
 

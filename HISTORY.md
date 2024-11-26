@@ -2,7 +2,7 @@
 
 ## 2.0.1 / 2024-11-26
 
-- Update read me
+- Update README.md
 
 ## 2.0.0 / 2023-10-18
 

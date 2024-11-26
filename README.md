@@ -5,12 +5,12 @@
 Built with [Power Query SDK](https://marketplace.visualstudio.com/items?itemName=PowerQuery.vscode-powerquery-sdk) in [Visual Studio Code](https://code.visualstudio.com/)
 
 
-The sample code in this repository demonstrates how to connect to ADH and pull data from Streams, Assets, and Data Views using Power Query M. Power Query works with a variety of Microsoft products such as Analysis Services, Excel, and Power BI workbooks. For more information on Power Query M please refer to [Microsoft's documentation](https://docs.microsoft.com/en-us/powerquery-m/).
+The sample code in this repository demonstrates how to connect to Cds and pull data from Streams, Assets, and Data Views using Power Query M. Power Query works with a variety of Microsoft products such as Analysis Services, Excel, and Power BI workbooks. For more information on Power Query M please refer to [Microsoft's documentation](https://docs.microsoft.com/en-us/powerquery-m/).
 
 ## Requirements
 
 - [Power BI Desktop](https://powerbi.microsoft.com/en-us/desktop/)
-- Register a [Client-Credentials Client](https://datahub.connect.aveva.com/clients) in your AVEVA Data Hub tenant and create a client secret to use in the configuration of this sample. ([Video Walkthrough](https://www.youtube.com/watch?v=JPWy0ZX9niU))
+- Register a [Client-Credentials Client](https://datahub.connect.aveva.com/clients) in your CONNECT data services tenant and create a client secret to use in the configuration of this sample. ([Video Walkthrough](https://www.youtube.com/watch?v=JPWy0ZX9niU))
   - __NOTE__: This sample only requires read access to resources (Streams, Assets, etc.) to run successfully
   - It is strongly advised to not elevate the permissions of a client beyond what is necessary.
 
@@ -138,7 +138,7 @@ At this point, the data should be consumable in a Power BI Dashboard or Excel Wo
 | GetCommunityStreamWindowData.pqm | Returns a collection of stored values from a Community Stream based on request parameters.                                 |
 | GetDataViewInterpolatedData.pqm  | Returns interpolated data for the provided Data View and index parameters.                                                 |
 | GetDataViewStoredData.pqm        | Returns stored data for the provided Data View and index parameters.                                                       |
-| GetGraphQLQuery.pqm              | Submit a GraphQL query to AVEVA Data Hub.                                                                                  |
+| GetGraphQLQuery.pqm              | Submit a GraphQL query to CONNECT data services.                                                                                  |
 
 ## Running Tests
 
@@ -151,5 +151,5 @@ At this point, the data should be consumable in a Power BI Dashboard or Excel Wo
 
 ---
 
-For the main ADH samples page [ReadMe](https://github.com/osisoft/OSI-Samples-OCS)  
+For the main Cds samples page [ReadMe](https://github.com/osisoft/OSI-Samples-OCS)  
 For the main AVEVA samples page [ReadMe](https://github.com/osisoft/OSI-Samples)

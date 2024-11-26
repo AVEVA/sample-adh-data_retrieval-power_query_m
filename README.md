@@ -1,6 +1,6 @@
 # ADH Power Query M Data Retrieval Sample
 
-**Version:** 2.0.0
+**Version:** 2.0.1
 
 Built with [Power Query SDK](https://marketplace.visualstudio.com/items?itemName=PowerQuery.vscode-powerquery-sdk) in [Visual Studio Code](https://code.visualstudio.com/)
 

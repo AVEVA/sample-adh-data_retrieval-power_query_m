@@ -1,9 +1,9 @@
+
 # CONNECT data services Power Query M Data Retrieval Sample
 
 **Version:** 2.0.1
 
 Built with [Power Query SDK](https://marketplace.visualstudio.com/items?itemName=PowerQuery.vscode-powerquery-sdk) in [Visual Studio Code](https://code.visualstudio.com/)
-
 
 The sample code in this repository demonstrates how to connect to CONNECT data services and pull data from Streams, Assets, and Data Views using Power Query M. Power Query works with a variety of Microsoft products such as Analysis Services, Excel, and Power BI workbooks. For more information on Power Query M please refer to [Microsoft's documentation](https://docs.microsoft.com/en-us/powerquery-m/).
 
@@ -152,4 +152,5 @@ At this point, the data should be consumable in a Power BI Dashboard or Excel Wo
 ---
 
 For the main CONNECT data services samples page [ReadMe](https://github.com/osisoft/OSI-Samples-OCS)  
+
 For the main AVEVA samples page [ReadMe](https://github.com/osisoft/OSI-Samples)

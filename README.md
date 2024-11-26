@@ -1,4 +1,4 @@
-# ADH Power Query M Data Retrieval Sample
+# CONNECT data services Power Query M Data Retrieval Sample
 
 **Version:** 2.0.1
 

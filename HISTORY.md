@@ -1,5 +1,9 @@
 # Version History
 
+## 2.0.1 / 2024-11-26
+
+- Update read me
+
 ## 2.0.0 / 2023-10-18
 
 - Migrating to use VS Code Power Query SDK

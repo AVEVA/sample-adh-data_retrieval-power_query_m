@@ -1,11 +1,11 @@
-# Cds Power Query M Data Retrieval Sample
 
-**Version:** 2.0.0
+# CONNECT data services Power Query M Data Retrieval Sample
+
+**Version:** 2.0.1
 
 Built with [Power Query SDK](https://marketplace.visualstudio.com/items?itemName=PowerQuery.vscode-powerquery-sdk) in [Visual Studio Code](https://code.visualstudio.com/)
 
-
-The sample code in this repository demonstrates how to connect to Cds and pull data from Streams, Assets, and Data Views using Power Query M. Power Query works with a variety of Microsoft products such as Analysis Services, Excel, and Power BI workbooks. For more information on Power Query M please refer to [Microsoft's documentation](https://docs.microsoft.com/en-us/powerquery-m/).
+The sample code in this repository demonstrates how to connect to CONNECT data services and pull data from Streams, Assets, and Data Views using Power Query M. Power Query works with a variety of Microsoft products such as Analysis Services, Excel, and Power BI workbooks. For more information on Power Query M please refer to [Microsoft's documentation](https://docs.microsoft.com/en-us/powerquery-m/).
 
 ## Requirements
 
@@ -30,6 +30,30 @@ The sample code in this repository demonstrates how to connect to Cds and pull d
 1. You may encounter the prompt to "Please specify how to connect." If this occurs, click **Edit Credentials**, select **Anonymous**, and click **Connect**.
 
 Note: It is not recommended to hard code the app settings directly in the power query scripts as this could pose a security risk.
+
+### PowerBI Service Refreshes
+
+If you plan to publish your PowerBI dashboard to the cloud PowerBI service, you may run into an issue where you cannot refresh your Semantic Model and you'll see the error message **"This dataset includes a dynamic data source. Since dynamic data sources aren't refreshed in the Power BI service, this dataset won't be refreshed."** The problem is that when a published dataset is refreshed, Power BI does some static analysis on the code to determine what the data sources for the dataset are and whether the supplied credentials are correct. Unfortunately in some cases, such as when the definition of a data source depends on the parameters from a custom M function, that static analysis fails and therefore the dataset does not refresh. To determine whether your dynamic data source can be refreshed, open the Data source settings dialog in Power Query Editor, and then select Data sources in current file. In the window that appears, look for the warning message, **"Some data sources may not be listed because of hand-authored queries."** In order to work around this issue, you can edit the sample code to replace any usage of the **"resource"** variable within **Web.Contents()** with your data services resource url. 
+
+**For example:**
+```C#
+GetJson =
+    try
+                    Web.Contents(
+                        "https://euno.datahub.connect.aveva.com/",
+                        [
+                            RelativePath = authUrl,
+                            Headers = [
+                                #"Content-Type" = "application/x-www-form-urlencoded;charset=UTF-8",
+                                Accept = "application/json"
+                            ],
+                            IsRetry = true,
+                            Content = authPOSTBodyBinary
+                        ]
+                    ),
+```
+
+When configuring your scheduled refresh, you should turn on the **“Skip Test Connection”** option on the data source in the Power BI Service and the dataset will refresh even if the call to the CONNECT resource on its own, without the dynamically added client credentials, would result in an error.
 
 ## Setting up Excel
 
@@ -127,5 +151,6 @@ At this point, the data should be consumable in a Power BI Dashboard or Excel Wo
 
 ---
 
-For the main Cds samples page [ReadMe](https://github.com/osisoft/OSI-Samples-OCS)  
+For the main CONNECT data services samples page [ReadMe](https://github.com/osisoft/OSI-Samples-OCS)  
+
 For the main AVEVA samples page [ReadMe](https://github.com/osisoft/OSI-Samples)

@@ -1,5 +1,9 @@
 # Version History
 
+## 2.0.1 / 2024-11-26
+
+- Update README.md
+
 ## 2.0.0 / 2023-10-18
 
 - Migrating to use VS Code Power Query SDK
@@ -17,7 +21,7 @@
 
 ## 1.2.0 / 2022-01-27
 
-- Updated for AVEVA Data Hub
+- Updated for CONNECT data services
 - Updated dependencies
 
 ## 1.1.1 / 2021-11-25

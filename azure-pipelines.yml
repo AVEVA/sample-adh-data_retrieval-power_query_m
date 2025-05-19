@@ -31,7 +31,7 @@ variables:
 jobs:
   - job: Tests
     pool:
-      name: DevOps Managed Containers Build
+      name: DevOps-Managed-Ubt22-Mdp
       demands: Agent.OS -equals Windows_NT
     variables:
       - name: StreamId
